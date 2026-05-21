@@ -1,0 +1,191 @@
+# Hermes Finance isolated runtime config.
+# Secrets live in {{HERMES_FINANCE_HOME}}/.env and are intentionally not copied from any other Hermes profile.
+_config_version: 23
+
+model:
+  default: deepseek-v4-pro
+  provider: deepseek
+  base_url: https://api.deepseek.com
+
+fallback_model:
+  provider: zai
+  model: glm-4-plus
+
+toolsets:
+  - hermes-cli
+
+agent:
+  max_turns: 120
+  gateway_timeout: 1800
+  restart_drain_timeout: 180
+  api_max_retries: 3
+  service_tier: ''
+  tool_use_enforcement: auto
+  gateway_timeout_warning: 900
+  gateway_notify_interval: 180
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets: []
+  verbose: false
+  reasoning_effort: high
+
+terminal:
+  backend: local
+  cwd: .
+  timeout: 300
+  env_passthrough:
+    - HERMES_HOME
+  shell_init_files: []
+  auto_source_bashrc: true
+  persistent_shell: true
+
+web:
+  backend: firecrawl
+  search_backend: ''
+  extract_backend: ''
+  use_gateway: false
+
+browser:
+  inactivity_timeout: 120
+  command_timeout: 30
+  record_sessions: false
+  allow_private_urls: false
+  engine: auto
+  auto_local_for_private_urls: true
+  cdp_url: ''
+  dialog_policy: must_respond
+  dialog_timeout_s: 300
+  cloud_provider: local
+  use_gateway: false
+
+file_read_max_chars: 150000
+
+tool_output:
+  max_bytes: 50000
+  max_lines: 2000
+  max_line_length: 2000
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 12000
+  user_char_limit: 4000
+  provider: ''
+
+context:
+  engine: compressor
+
+delegation:
+  model: ''
+  provider: ''
+  base_url: ''
+  api_key: ''
+  inherit_mcp_toolsets: true
+  max_iterations: 50
+
+skills:
+  disabled: []
+  external_dirs: []
+
+security:
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_path: tirith
+  tirith_timeout: 5
+  tirith_fail_open: true
+
+sessions:
+  auto_prune: true
+  retention_days: 90
+  vacuum_after_prune: true
+  min_interval_hours: 24
+
+logging:
+  level: INFO
+  max_size_mb: 10
+  backup_count: 5
+
+model_catalog:
+  enabled: true
+  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+  ttl_hours: 24
+  providers: {}
+
+network:
+  force_ipv4: false
+
+# MCP servers are configured here, but key-bearing trading/data servers stay disabled until
+# credentials are filled in .env and the operator explicitly enables them.
+mcp_servers:
+  finance_vault:
+    enabled: true
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "{{HERMES_FINANCE_VAULT}}"]
+    timeout: 120
+    connect_timeout: 60
+  coingecko:
+    enabled: true
+    command: npx
+    args: ["-y", "mcp-remote", "https://mcp.api.coingecko.com/mcp"]
+    timeout: 120
+    connect_timeout: 60
+  firecrawl:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "FIRECRAWL_API_KEY", "--", "npx", "-y", "firecrawl-mcp"]
+    timeout: 180
+    connect_timeout: 60
+  exa:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "EXA_API_KEY", "--", "npx", "-y", "exa-mcp-server"]
+    timeout: 180
+    connect_timeout: 60
+  alphavantage:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "ALPHA_VANTAGE_API_KEY", "--", "uvx", "marketdata-mcp-server", "${ALPHA_VANTAGE_API_KEY}"]
+    timeout: 180
+    connect_timeout: 60
+  polymarket:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "POLYMARKET_PRIVATE_KEY", "--", "npx", "-y", "mcp-polymarket"]
+    env:
+      POLYMARKET_PRIVATE_KEY: "${POLYMARKET_PRIVATE_KEY}"
+      POLYMARKET_FUNDER: "${POLYMARKET_FUNDER}"
+      POLYMARKET_READONLY: "false"
+      POLYMARKET_CHAIN_ID: "137"
+    timeout: 180
+    connect_timeout: 60
+  hyperliquid:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "HYPERLIQUID_PRIVATE_KEY", "--", "uvx", "--from", "mcp-hyperliquid", "hyperliquid-mcp"]
+    env:
+      HYPERLIQUID_PRIVATE_KEY: "${HYPERLIQUID_PRIVATE_KEY}"
+      HYPERLIQUID_ACCOUNT_ADDRESS: "${HYPERLIQUID_ACCOUNT_ADDRESS}"
+      HYPERLIQUID_TESTNET: "${HYPERLIQUID_TESTNET}"
+      HYPERLIQUID_VAULT_ADDRESS: "${HYPERLIQUID_VAULT_ADDRESS}"
+    timeout: 180
+    connect_timeout: 60
+  alpaca:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "ALPACA_API_KEY", "--require", "ALPACA_SECRET_KEY", "--", "uvx", "alpaca-mcp-server"]
+    env:
+      ALPACA_API_KEY: "${ALPACA_API_KEY}"
+      ALPACA_SECRET_KEY: "${ALPACA_SECRET_KEY}"
+      ALPACA_PAPER: "true"
+    timeout: 180
+    connect_timeout: 60
+  obsidian:
+    enabled: false
+    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
+    args: ["--require", "OBSIDIAN_API_KEY", "--", "uvx", "mcp-obsidian"]
+    env:
+      OBSIDIAN_API_KEY: "${OBSIDIAN_API_KEY}"
+      OBSIDIAN_HOST: "${OBSIDIAN_HOST}"
+      OBSIDIAN_PORT: "${OBSIDIAN_PORT}"
+    timeout: 120
+    connect_timeout: 60
