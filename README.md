@@ -63,6 +63,63 @@ hermes              # start chatting!
 
 ---
 
+## Hermes Finance Open-Source Fork
+
+This repository also ships **Hermes Finance**: an open-source, finance-specialized Hermes distribution with:
+
+- an isolated `HERMES_HOME`;
+- a pragmatic, analytic finance persona;
+- finance/trading/research skills;
+- MCP defaults for vault access, CoinGecko, Firecrawl, Exa, Alpha Vantage, Polymarket, Hyperliquid, Alpaca, and optional Obsidian REST API;
+- a seed Obsidian LLMWiki with trading math, execution, calibration, and risk notes.
+
+Unlike the default Hermes profile, Hermes Finance is meant to install cleanly for any operator without bundling private memory, addresses, balances, or personal credentials.
+
+### Install Hermes Finance
+
+From this repository root:
+
+```bash
+python3 -m venv venv
+venv/bin/python -m pip install --upgrade pip setuptools wheel
+venv/bin/python -m pip install -e '.[mcp]'
+venv/bin/python scripts/install-hermes-finance-profile.py
+```
+
+Defaults:
+
+- home: `~/.hermes-finance`
+- wrapper: `~/.local/bin/hermes-finance`
+- vault root: `$OBSIDIAN_VAULT`, otherwise `~/Vault`
+- finance wiki folder: `<vault root>/Hermes-Finance`
+
+If your vault lives elsewhere:
+
+```bash
+venv/bin/python scripts/install-hermes-finance-profile.py --vault-root "$HOME/Documents/Obsidian Vault"
+```
+
+Or install into an exact folder:
+
+```bash
+venv/bin/python scripts/install-hermes-finance-profile.py --vault "$HOME/Documents/Obsidian Vault/Projects/Hermes-Finance"
+```
+
+After install:
+
+```bash
+hermes-finance
+```
+
+Credentials start empty in `~/.hermes-finance/.env`. Check readiness with:
+
+```bash
+~/.hermes-finance/scripts/check_mcp_readiness.py
+~/.hermes-finance/scripts/enable_ready_mcps.py --dry-run
+```
+
+Direct trading MCPs are live-fire once enabled. They remain disabled by default and require explicit operator action.
+
 ## Getting Started
 
 ```bash
