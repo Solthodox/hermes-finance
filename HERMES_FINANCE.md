@@ -19,8 +19,9 @@ The repository is the source of truth:
 
 - Home template: `hermes_finance_templates/home`
 - Obsidian wiki template: `hermes_finance_templates/obsidian-vault`
+- Root finance skills: `skills/finance`, `skills/crypto`, `skills/note-taking/finance-obsidian-vault`, `skills/research/source-quality`
+- Root finance helper scripts: `scripts/hermes_finance`
 - Installer: `scripts/install-hermes-finance-profile.py`
-- Runtime wrapper template logic: `scripts/install-hermes-finance-profile.py`
 
 The installed home (`~/.hermes-finance` by default) is runtime state plus user credentials. Do not commit secrets or user-specific runtime state back into the project.
 

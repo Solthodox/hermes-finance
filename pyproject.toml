@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "hermes-agent"
+name = "hermes-finance"
 version = "0.13.0"
-description = "The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere"
+description = "Finance-specialized autonomous AI agent for research, risk, execution discipline, and persistent trading knowledge"
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [{ name = "Nous Research" }]
+authors = [{ name = "Solthodox" }]
 license = { text = "MIT" }
 dependencies = [
   # Core — every direct dep is exact-pinned to ==X.Y.Z (no ranges).
@@ -128,12 +128,12 @@ bedrock = ["boto3==1.42.89"]
 termux = [
   # Baseline Android / Termux path for reliable fresh installs.
   "python-telegram-bot[webhooks]==22.6",
-  "hermes-agent[cron]",
-  "hermes-agent[cli]",
-  "hermes-agent[pty]",
-  "hermes-agent[mcp]",
-  "hermes-agent[honcho]",
-  "hermes-agent[acp]",
+  "hermes-finance[cron]",
+  "hermes-finance[cli]",
+  "hermes-finance[pty]",
+  "hermes-finance[mcp]",
+  "hermes-finance[honcho]",
+  "hermes-finance[acp]",
 ]
 termux-all = [
   # Best-effort "install all" profile for Termux: include broad extras that
@@ -143,21 +143,21 @@ termux-all = [
   # Excluded for now:
   # - matrix (mautrix[encryption] -> python-olm build failures on Termux)
   # - voice  (faster-whisper chain requires ctranslate2/av builds not packaged)
-  "hermes-agent[termux]",
-  "hermes-agent[messaging]",
-  "hermes-agent[slack]",
-  "hermes-agent[tts-premium]",
-  "hermes-agent[dingtalk]",
-  "hermes-agent[feishu]",
-  "hermes-agent[google]",
+  "hermes-finance[termux]",
+  "hermes-finance[messaging]",
+  "hermes-finance[slack]",
+  "hermes-finance[tts-premium]",
+  "hermes-finance[dingtalk]",
+  "hermes-finance[feishu]",
+  "hermes-finance[google]",
   # mistral: omitted from broad termux-all profile — `mistralai` PyPI package
   # is currently quarantined (malicious 2.4.6 release). Users who explicitly
-  # want Voxtral STT/TTS can still `pip install hermes-agent[mistral]`
+  # want Voxtral STT/TTS can still `pip install hermes-finance[mistral]`
   # directly once PyPI un-quarantines.
-  "hermes-agent[bedrock]",
-  "hermes-agent[homeassistant]",
-  "hermes-agent[sms]",
-  "hermes-agent[web]",
+  "hermes-finance[bedrock]",
+  "hermes-finance[homeassistant]",
+  "hermes-finance[sms]",
+  "hermes-finance[web]",
 ]
 dingtalk = ["dingtalk-stream==0.24.3", "alibabacloud-dingtalk==2.2.42", "qrcode==7.4.2"]
 feishu = ["lark-oapi==1.5.3", "qrcode==7.4.2"]
@@ -188,50 +188,49 @@ rl = [
 ]
 yc-bench = ["yc-bench @ git+https://github.com/collinear-ai/yc-bench.git@bfb0c88062450f46341bd9a5298903fc2e952a5c ; python_version >= '3.12'"]
 all = [
-  "hermes-agent[anthropic]",
-  "hermes-agent[exa]",
-  "hermes-agent[firecrawl]",
-  "hermes-agent[parallel-web]",
-  "hermes-agent[fal]",
-  "hermes-agent[edge-tts]",
-  "hermes-agent[modal]",
-  "hermes-agent[daytona]",
-  "hermes-agent[vercel]",
-  "hermes-agent[messaging]",
+  "hermes-finance[anthropic]",
+  "hermes-finance[exa]",
+  "hermes-finance[firecrawl]",
+  "hermes-finance[parallel-web]",
+  "hermes-finance[fal]",
+  "hermes-finance[edge-tts]",
+  "hermes-finance[modal]",
+  "hermes-finance[daytona]",
+  "hermes-finance[vercel]",
+  "hermes-finance[messaging]",
   # matrix: python-olm (required by matrix-nio[e2e]) is upstream-broken on
   # modern macOS (archived libolm, C++ errors with Clang 21+).  On Linux the
   # [matrix] extra's own marker pulls in the [e2e] variant automatically.
-  "hermes-agent[matrix]; sys_platform == 'linux'",
-  "hermes-agent[cron]",
-  "hermes-agent[cli]",
-  "hermes-agent[dev]",
-  "hermes-agent[tts-premium]",
-  "hermes-agent[slack]",
-  "hermes-agent[pty]",
-  "hermes-agent[honcho]",
-  "hermes-agent[mcp]",
-  "hermes-agent[homeassistant]",
-  "hermes-agent[sms]",
-  "hermes-agent[acp]",
-  "hermes-agent[voice]",
-  "hermes-agent[dingtalk]",
-  "hermes-agent[feishu]",
-  "hermes-agent[google]",
+  "hermes-finance[matrix]; sys_platform == 'linux'",
+  "hermes-finance[cron]",
+  "hermes-finance[cli]",
+  "hermes-finance[dev]",
+  "hermes-finance[tts-premium]",
+  "hermes-finance[slack]",
+  "hermes-finance[pty]",
+  "hermes-finance[honcho]",
+  "hermes-finance[mcp]",
+  "hermes-finance[homeassistant]",
+  "hermes-finance[sms]",
+  "hermes-finance[acp]",
+  "hermes-finance[voice]",
+  "hermes-finance[dingtalk]",
+  "hermes-finance[feishu]",
+  "hermes-finance[google]",
   # mistral: omitted from [all] — `mistralai` PyPI package is currently
   # quarantined (malicious 2.4.6 release on 2026-05-12). Pulling it from
   # [all] would break every fresh install / AUR build / Docker build / CI
   # run until PyPI un-quarantines. Users who explicitly want Voxtral STT/TTS
-  # can still `pip install hermes-agent[mistral]` once it's available again.
-  "hermes-agent[bedrock]",
-  "hermes-agent[web]",
-  "hermes-agent[youtube]",
+  # can still `pip install hermes-finance[mistral]` once it's available again.
+  "hermes-finance[bedrock]",
+  "hermes-finance[web]",
+  "hermes-finance[youtube]",
 ]
 
 [project.scripts]
-hermes = "hermes_cli.main:main"
-hermes-agent = "run_agent:main"
-hermes-acp = "acp_adapter.entry:main"
 hermes-finance = "hermes_cli.main:main"
+hermes-finance-agent = "run_agent:main"
+hermes-finance-acp = "acp_adapter.entry:main"
 
 [tool.setuptools]
 py-modules = ["run_agent", "model_tools", "toolsets", "batch_runner", "trajectory_compressor", "toolset_distributions", "cli", "hermes_bootstrap", "hermes_constants", "hermes_state", "hermes_time", "hermes_logging", "rl_cli", "utils"]

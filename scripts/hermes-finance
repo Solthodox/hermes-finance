@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 unset PYTHONPATH
 unset PYTHONHOME
-# hermes-finance starts credential-empty by design. Put keys in /tmp/hf-install-test-81i9iu3_/home/.env.
+# hermes-finance starts credential-empty by design. Put keys in /tmp/hf-final-test-hoc565y7/home/.env.
 unset DEEPSEEK_API_KEY
 unset ZAI_API_KEY
 unset Z_AI_API_KEY
@@ -29,6 +29,6 @@ unset HYPERLIQUID_VAULT_ADDRESS
 unset ALPACA_API_KEY
 unset ALPACA_SECRET_KEY
 unset OBSIDIAN_API_KEY
-export HERMES_HOME="/tmp/hf-install-test-81i9iu3_/home"
+export HERMES_HOME="/tmp/hf-final-test-hoc565y7/home"
 export HERMES_OPTIONAL_SKILLS="/home/solthodox/Documentos/repos/hermes-finance/optional-skills"
 exec "/home/solthodox/Documentos/repos/hermes-finance/venv/bin/hermes-finance" "$@"

@@ -27,6 +27,13 @@ DEFAULT_HOME = Path.home() / ".hermes-finance"
 DEFAULT_VAULT_ROOT = Path(os.environ.get("OBSIDIAN_VAULT", Path.home() / "Vault"))
 DEFAULT_WRAPPER = Path.home() / ".local" / "bin" / "hermes-finance"
 DEFAULT_REPOS_DIR = Path(os.environ.get("HERMES_FINANCE_REPOS_DIR", Path.home() / "repos"))
+ROOT_SKILL_DIRS = [
+    REPO / "skills" / "finance",
+    REPO / "skills" / "crypto",
+    REPO / "skills" / "note-taking" / "finance-obsidian-vault",
+    REPO / "skills" / "research" / "source-quality",
+]
+ROOT_HELPER_SCRIPTS_DIR = REPO / "scripts" / "hermes_finance"
 
 TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".py", ".json", ".sh", ".txt", ".ts", ".toml"}
 TEXT_NAMES = {".env", ".env.example", "AGENTS.md", "SOUL.md"}
@@ -85,6 +92,28 @@ def copy_tree_render(src: Path, dst: Path, *, preserve_env: bool, repl: dict[str
         else:
             shutil.copy2(item, target)
 
+def install_root_skills(home: Path, *, repl: dict[str, str]) -> None:
+    skills_root = home / "skills"
+    skills_root.mkdir(parents=True, exist_ok=True)
+    for src in ROOT_SKILL_DIRS:
+        if not src.exists():
+            continue
+        if src.is_dir() and (src / "SKILL.md").exists():
+            rel = src.relative_to(REPO / "skills")
+            copy_tree_render(src, skills_root / rel, preserve_env=False, repl=repl)
+            continue
+        for skill_dir in src.iterdir():
+            if skill_dir.is_dir() and (skill_dir / "SKILL.md").exists():
+                rel = skill_dir.relative_to(REPO / "skills")
+                copy_tree_render(skill_dir, skills_root / rel, preserve_env=False, repl=repl)
+
+
+def install_root_helper_scripts(home: Path, *, repl: dict[str, str]) -> None:
+    scripts_root = home / "scripts"
+    scripts_root.mkdir(parents=True, exist_ok=True)
+    if ROOT_HELPER_SCRIPTS_DIR.exists():
+        copy_tree_render(ROOT_HELPER_SCRIPTS_DIR, scripts_root, preserve_env=False, repl=repl)
+
 
 def write_wrapper(path: Path, home: Path) -> None:
     unset_lines = "\n".join(f"unset {key}" for key in CREDENTIAL_ENV_KEYS)
@@ -124,6 +153,8 @@ def main() -> int:
 
     args.home.expanduser().mkdir(parents=True, exist_ok=True)
     copy_tree_render(HOME_TEMPLATE, args.home.expanduser(), preserve_env=not args.reset_env, repl=repl)
+    install_root_skills(args.home.expanduser(), repl=repl)
+    install_root_helper_scripts(args.home.expanduser(), repl=repl)
     for sub in ["logs", "sessions", "state", "cache", "workspace"]:
         (args.home.expanduser() / sub).mkdir(parents=True, exist_ok=True)
 
