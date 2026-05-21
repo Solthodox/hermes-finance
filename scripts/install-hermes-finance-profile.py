@@ -159,7 +159,6 @@ def main() -> int:
         (args.home.expanduser() / sub).mkdir(parents=True, exist_ok=True)
 
     write_wrapper(args.wrapper.expanduser(), args.home.expanduser())
-    write_wrapper(REPO / "scripts" / "hermes-finance", args.home.expanduser())
 
     if not args.skip_vault:
         vault.expanduser().mkdir(parents=True, exist_ok=True)
