@@ -1,14 +1,14 @@
 """
-Hermes CLI - Unified command-line interface for Hermes Agent.
+Hermes CLI - Unified command-line interface for Hermes Finance.
 
 Provides subcommands for:
-- hermes chat          - Interactive chat (same as ./hermes)
-- hermes gateway       - Run gateway in foreground
-- hermes gateway start - Start gateway service
-- hermes gateway stop  - Stop gateway service
-- hermes setup         - Interactive setup wizard
-- hermes status        - Show status of all components
-- hermes cron          - Manage cron jobs
+- hermes-finance chat          - Interactive chat (same as ./hermes-finance)
+- hermes-finance gateway       - Run gateway in foreground
+- hermes-finance gateway start - Start gateway service
+- hermes-finance gateway stop  - Stop gateway service
+- hermes-finance setup        - Interactive setup wizard
+- hermes-finance status       - Show status of all components
+- hermes-finance cron         - Manage cron jobs
 """
 
 import os

@@ -84,7 +84,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/hermes-finance-banner.png',
+    image: 'img/hermes-finance-banner.svg',
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,
@@ -162,7 +162,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Hermes Finance · Fork by <a href="https://github.com/Solthodox">Solthodox</a> · Based on Hermes Agent by <a href="https://nousresearch.com">Nous Research</a> · MIT License · ${new Date().getFullYear()}`,
+      copyright: `Hermes Finance · Fork by <a href="https://github.com/Solthodox">Solthodox</a> · MIT License · ${new Date().getFullYear()}`,
     },
     prism: {
       theme: prismThemes.github,

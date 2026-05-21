@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 420" role="img" aria-labelledby="title desc">
+  <title id="title">Hermes Finance banner</title>
+  <desc id="desc">Dark banner with gold title Hermes Finance and a pragmatic analytic trading systems subtitle.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f14"/>
+      <stop offset="55%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5d36a"/>
+      <stop offset="50%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#c7921e"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="420" fill="url(#bg)"/>
+  <g opacity="0.2" stroke="#ffd700" fill="none">
+    <path d="M90 300 L240 250 L360 270 L520 190 L670 210 L840 110 L1000 145 L1160 95 L1320 120 L1510 60" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M90 330 L240 295 L360 305 L520 255 L670 250 L840 205 L1000 215 L1160 190 L1320 195 L1510 165" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <g stroke-width="2">
+      <line x1="240" y1="220" x2="240" y2="310"/>
+      <line x1="520" y1="170" x2="520" y2="275"/>
+      <line x1="840" y1="80" x2="840" y2="220"/>
+      <line x1="1160" y1="70" x2="1160" y2="205"/>
+      <line x1="1320" y1="90" x2="1320" y2="210"/>
+    </g>
+  </g>
+  <g transform="translate(120 108)">
+    <text x="0" y="0" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="84" font-weight="800" letter-spacing="4" fill="url(#gold)" filter="url(#glow)">HERMES FINANCE</text>
+    <text x="2" y="58" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="28" font-weight="600" letter-spacing="5" fill="#f8e7ac">PRAGMATIC · ANALYTIC · TRADING SYSTEMS</text>
+    <text x="2" y="108" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="400" fill="#d6d3d1">Research · Probability · Execution · Risk · Memory</text>
+  </g>
+  <g transform="translate(1290 110)">
+    <circle cx="90" cy="90" r="88" fill="none" stroke="#ffd700" stroke-width="6" opacity="0.85"/>
+    <path d="M45 120 L78 92 L104 108 L145 62" stroke="#ffd700" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M135 62 L145 62 L145 72" stroke="#ffd700" stroke-width="8" stroke-linecap="round"/>
+    <text x="48" y="66" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="34" font-weight="800" fill="#f5d36a">₿</text>
+  </g>
+</svg>

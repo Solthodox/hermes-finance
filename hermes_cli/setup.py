@@ -1,5 +1,5 @@
 """
-Interactive setup wizard for Hermes Agent.
+Interactive setup wizard for Hermes Finance.
 
 Modular wizard with independently-runnable sections:
   1. Model & Provider — choose your AI provider and model
@@ -8,7 +8,7 @@ Modular wizard with independently-runnable sections:
   4. Messaging Platforms — connect Telegram, Discord, etc.
   5. Tools — configure TTS, web search, image generation, etc.
 
-Config files are stored in ~/.hermes/ for easy access.
+Config files are stored in ~/.hermes-finance/ for easy access.
 """
 
 import importlib.util
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 
-_DOCS_BASE = "https://hermes-agent.nousresearch.com/docs"
+_DOCS_BASE = "https://solthodox.github.io/hermes-finance/docs"
 
 
 def _model_config_dict(config: Dict[str, Any]) -> Dict[str, Any]:
@@ -509,6 +509,25 @@ def _print_setup_summary(config: dict, hermes_home):
         tool_status.append(("RL Training (Tinker)", False, "WANDB_API_KEY"))
     else:
         tool_status.append(("RL Training (Tinker)", False, "TINKER_API_KEY"))
+
+    # Finance/trading MCPs
+    finance_ready = []
+    if get_env_value("ALPHA_VANTAGE_API_KEY"):
+        finance_ready.append("Alpha Vantage")
+    if get_env_value("COINGECKO_DEMO_API_KEY") or get_env_value("COINGECKO_PRO_API_KEY"):
+        finance_ready.append("CoinGecko")
+    if get_env_value("POLYMARKET_PRIVATE_KEY"):
+        finance_ready.append("Polymarket MCP")
+    if get_env_value("HYPERLIQUID_PRIVATE_KEY"):
+        finance_ready.append("Hyperliquid MCP")
+    if get_env_value("ALPACA_API_KEY") and get_env_value("ALPACA_SECRET_KEY"):
+        finance_ready.append("Alpaca MCP")
+    if get_env_value("OBSIDIAN_API_KEY"):
+        finance_ready.append("Obsidian MCP")
+    if finance_ready:
+        tool_status.append(("Finance / Trading MCPs", True, ", ".join(finance_ready)))
+    else:
+        tool_status.append(("Finance / Trading MCPs", False, "ALPHA_VANTAGE_API_KEY, COINGECKO_*_API_KEY, POLYMARKET_PRIVATE_KEY, HYPERLIQUID_PRIVATE_KEY, ALPACA_API_KEY/ALPACA_SECRET_KEY, or OBSIDIAN_API_KEY"))
 
     # Home Assistant
     if get_env_value("HASS_TOKEN"):
@@ -1136,7 +1155,7 @@ def _setup_tts_provider(config: dict):
         print_info("OpenAI TTS will use the managed Nous gateway and bill to your subscription.")
         if get_env_value("VOICE_TOOLS_OPENAI_KEY") or get_env_value("OPENAI_API_KEY"):
             print_warning(
-                "Direct OpenAI credentials are still configured and may take precedence until removed from ~/.hermes/.env."
+                "Direct OpenAI credentials are still configured and may take precedence until removed from ~/.hermes-finance/.env."
             )
 
     if selected == "neutts":
@@ -1561,7 +1580,7 @@ def setup_terminal_backend(config: dict):
     elif selected_backend == "vercel_sandbox":
         print_success("Terminal backend: Vercel Sandbox")
         print_info("Cloud microVM sandboxes with snapshot-backed filesystem persistence.")
-        print_info("Requires the optional SDK: pip install 'hermes-agent[vercel]'")
+        print_info("Requires the optional SDK: pip install 'hermes-finance[vercel]'")
 
         try:
             __import__("vercel")
@@ -1585,7 +1604,7 @@ def setup_terminal_backend(config: dict):
             if result.returncode == 0:
                 print_success("vercel SDK installed")
             else:
-                print_warning("Install failed — run manually: pip install 'hermes-agent[vercel]'")
+                print_warning("Install failed — run manually: pip install 'hermes-finance[vercel]'")
                 if result.stderr:
                     print_info(f"  Error: {result.stderr.strip().splitlines()[-1]}")
 
@@ -2026,7 +2045,7 @@ def _setup_slack():
     print_info("   3. Install to Workspace: Settings → Install App")
     print_info("   4. After installing, invite the bot to channels: /invite @YourBot")
     print()
-    print_info("   Full guide: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/slack/")
+    print_info("   Full guide: https://solthodox.github.io/hermes-finance/docs/user-guide/messaging/slack/")
     print()
 
     # Generate and write manifest up-front so the user can paste it into
@@ -2084,8 +2103,8 @@ def _write_slack_manifest_and_instruct():
         from hermes_constants import get_hermes_home
 
         manifest = _build_full_manifest(
-            bot_name="Hermes",
-            bot_description="Your Hermes agent on Slack",
+            bot_name="Hermes Finance",
+            bot_description="Your Hermes Finance agent on Slack",
         )
         target = Path(get_hermes_home()) / "slack-manifest.json"
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -2239,7 +2258,7 @@ def _setup_mattermost():
     home_channel = prompt("Home channel ID (leave empty to set later with /set-home)")
     if home_channel:
         save_env_value("MATTERMOST_HOME_CHANNEL", home_channel)
-    print_info("   Open config in your editor:  hermes config edit")
+    print_info("   Open config in your editor:  hermes-finance config edit")
 
 
 def _setup_bluebubbles():
@@ -2327,7 +2346,7 @@ def _setup_webhooks():
     print_warning("   internet. For security, run the gateway in a sandboxed environment")
     print_warning("   (Docker, VM, etc.) to limit blast radius from prompt injection.")
     print()
-    print_info("   Full guide: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks/")
+    print_info("   Full guide: https://solthodox.github.io/hermes-finance/docs/user-guide/messaging/webhooks/")
     print()
 
     port = prompt("Webhook port (default 8644)")
@@ -2354,10 +2373,10 @@ def _setup_webhooks():
     print_info("      http://your-server:8644/webhooks/<route-name>")
     print()
     print_info("   Route configuration guide:")
-    print_info("   https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks/#configuring-routes")
+    print_info("   https://solthodox.github.io/hermes-finance/docs/user-guide/messaging/webhooks/#configuring-routes")
     print()
-    print_info("   Open config in your editor:  hermes config edit")
-    print_info("   Open config in your editor:  hermes config edit")
+    print_info("   Open config in your editor:  hermes-finance config edit")
+    print_info("   Open config in your editor:  hermes-finance config edit")
 
 
 def setup_gateway(config: dict):
@@ -3130,7 +3149,7 @@ def run_setup_wizard(args):
     )
     print(
         color(
-            "│             ⚕ Hermes Agent Setup Wizard                │", Colors.MAGENTA
+            "│             ⚕ Hermes Finance Setup Wizard                │", Colors.MAGENTA
         )
     )
     print(
@@ -3141,7 +3160,7 @@ def run_setup_wizard(args):
     )
     print(
         color(
-            "│  Let's configure your Hermes Agent installation.       │", Colors.MAGENTA
+            "│  Let's configure your Hermes Finance installation.       │", Colors.MAGENTA
         )
     )
     print(

@@ -1,13 +1,13 @@
 """
-Configuration management for Hermes Agent.
+Configuration management for Hermes Finance.
 
-Config files are stored in ~/.hermes/ for easy access:
-- ~/.hermes/config.yaml  - All settings (model, toolsets, terminal, etc.)
-- ~/.hermes/.env         - API keys and secrets
+Config files are stored in ~/.hermes-finance/ for easy access:
+- ~/.hermes-finance/config.yaml  - All settings (model, toolsets, terminal, etc.)
+- ~/.hermes-finance/.env         - API keys and secrets
 
 This module provides:
-- hermes config          - Show current configuration
-- hermes config edit     - Open config in editor
+- hermes-finance config          - Show current configuration
+- hermes-finance config edit     - Open config in editor
 - hermes config set      - Set a specific value
 - hermes config wizard   - Re-run setup wizard
 """
@@ -37,7 +37,7 @@ _CONFIG_PARSE_WARNED: set = set()
 def _warn_config_parse_failure(config_path: Path, exc: Exception) -> None:
     """Surface a config.yaml parse failure to user, log, and stderr.
 
-    A YAML parse error in ``~/.hermes/config.yaml`` causes ``load_config()``
+    A YAML parse error in ``~/.hermes-finance/config.yaml`` causes ``load_config()``
     to silently fall back to ``DEFAULT_CONFIG``, which means every user
     override (auxiliary providers, fallback chain, model overrides, etc.)
     is dropped. Before this helper that was a one-line ``print(...)`` that
@@ -193,7 +193,7 @@ def get_managed_update_command() -> Optional[str]:
     """Return the preferred upgrade command for a managed install."""
     managed_system = get_managed_system()
     if managed_system == "Homebrew":
-        return "brew upgrade hermes-agent"
+        return "brew upgrade hermes-finance"
     if managed_system == "NixOS":
         return "sudo nixos-rebuild switch"
     return None
@@ -214,7 +214,7 @@ def format_managed_message(action: str = "modify this Hermes installation") -> s
         return (
             f"Cannot {action}: this Hermes installation is managed by NixOS "
             f"(HERMES_MANAGED={env_hint}).\n"
-            "Edit services.hermes-agent.settings in your configuration.nix and run:\n"
+            "Edit services.hermes-finance.settings in your configuration.nix and run:\n"
             "  sudo nixos-rebuild switch"
         )
 
@@ -224,7 +224,7 @@ def format_managed_message(action: str = "modify this Hermes installation") -> s
             f"Cannot {action}: this Hermes installation is managed by Homebrew "
             f"(HERMES_MANAGED={env_hint}).\n"
             "Use:\n"
-            "  brew upgrade hermes-agent"
+            "  brew upgrade hermes-finance"
         )
 
     return (
@@ -274,9 +274,9 @@ def get_container_exec_info() -> Optional[dict]:
     # All other exceptions (PermissionError, malformed data, etc.) propagate
 
     backend = info.get("backend", "docker")
-    container_name = info.get("container_name", "hermes-agent")
+    container_name = info.get("container_name", "hermes-finance")
     exec_user = info.get("exec_user", "hermes")
-    hermes_bin = info.get("hermes_bin", "/data/current-package/bin/hermes")
+    hermes_bin = info.get("hermes_bin", "/data/current-package/bin/hermes-finance")
 
     return {
         "backend": backend,
@@ -385,7 +385,7 @@ def _ensure_default_soul_md(home: Path) -> None:
 
 
 def ensure_hermes_home():
-    """Ensure ~/.hermes directory structure exists with secure permissions.
+    """Ensure ~/.hermes-finance directory structure exists with secure permissions.
 
     In managed mode (NixOS), dirs are created by the activation script with
     setgid + group-writable (2770). We skip mkdir and set umask(0o007) so
@@ -647,7 +647,7 @@ DEFAULT_CONFIG = {
         # limited the `/rollback` listing; v2 actually rewrites the ref and
         # garbage-collects older commits.
         "max_snapshots": 20,
-        # Hard ceiling on total ``~/.hermes/checkpoints/`` size (MB).  When
+        # Hard ceiling on total ``~/.hermes-finance/checkpoints/`` size (MB).  When
         # exceeded, the oldest checkpoint per project is dropped in a
         # round-robin pass until total size falls under the cap.
         # 0 disables the size cap.
@@ -1006,7 +1006,7 @@ DEFAULT_CONFIG = {
             # use, OR an absolute path to a pre-downloaded .onnx file.
             # Full voice list: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/VOICES.md
             "voice": "en_US-lessac-medium",
-            # "voices_dir": "",        # Override voice cache dir; default = ~/.hermes/cache/piper-voices/
+            # "voices_dir": "",        # Override voice cache dir; default = ~/.hermes-finance/cache/piper-voices/
             # "use_cuda": False,       # Requires onnxruntime-gpu
             # "length_scale": 1.0,     # 2.0 = twice as slow
             # "noise_scale": 0.667,
@@ -1051,7 +1051,7 @@ DEFAULT_CONFIG = {
     # "compressor" = built-in lossy summarization (default).
     # Set to a plugin name to activate an alternative engine (e.g. "lcm"
     # for Lossless Context Management).  The engine must be installed as
-    # a plugin in plugins/context_engine/<name>/ or ~/.hermes/plugins/.
+    # a plugin in plugins/context_engine/<name>/ or ~/.hermes-finance/plugins/.
     "context": {
         "engine": "compressor",
     },
@@ -1132,7 +1132,7 @@ DEFAULT_CONFIG = {
 
     # Skills — external skill directories for sharing skills across tools/agents.
     # Each path is expanded (~, ${VAR}) and resolved.  Read-only — skill creation
-    # always goes to ~/.hermes/skills/.
+    # always goes to ~/.hermes-finance/skills/.
     "skills": {
         "external_dirs": [],   # e.g. ["~/.agents/skills", "/shared/team-skills"]
         # Substitute ${HERMES_SKILL_DIR} and ${HERMES_SESSION_ID} in SKILL.md
@@ -1184,8 +1184,8 @@ DEFAULT_CONFIG = {
         # without use. Archived skills are recoverable — no auto-deletion.
         "archive_after_days": 90,
         # Pre-run backup: before every real curator pass (dry-run is
-        # skipped), snapshot ~/.hermes/skills/ into
-        # ~/.hermes/skills/.curator_backups/<utc-iso>/skills.tar.gz so the
+        # skipped), snapshot ~/.hermes-finance/skills/ into
+        # ~/.hermes-finance/skills/.curator_backups/<utc-iso>/skills.tar.gz so the
         # user can roll back with `hermes curator rollback`.
         "backup": {
             "enabled": True,
@@ -1237,7 +1237,7 @@ DEFAULT_CONFIG = {
     # WhatsApp platform settings (gateway mode)
     "whatsapp": {
         # Reply prefix prepended to every outgoing WhatsApp message.
-        # Default (None) uses the built-in "⚕ *Hermes Agent*" header.
+        # Default (None) uses the built-in "₿ *Hermes Finance*" header.
         # Set to "" (empty string) to disable the header entirely.
         # Supports \n for newlines, e.g. "🤖 *My Bot*\n──────\n"
     },
@@ -1305,7 +1305,7 @@ DEFAULT_CONFIG = {
     # subagent_stop, etc.).  Each entry maps an event name to a list of
     # {matcher, command, timeout} dicts.  First registration of a new
     # command prompts the user for consent; subsequent runs reuse the
-    # stored approval from ~/.hermes/shell-hooks-allowlist.json.
+    # stored approval from ~/.hermes-finance/shell-hooks-allowlist.json.
     # See `website/docs/user-guide/features/hooks.md` for schema + examples.
     "hooks": {},
 
@@ -1389,14 +1389,14 @@ DEFAULT_CONFIG = {
         #     with the active virtualenv/conda env's python, so project deps
         #     (pandas, torch, project packages) and relative paths resolve.
         #   strict            — scripts run in an isolated temp directory with
-        #     hermes-agent's own python (sys.executable). Maximum isolation
+        #     hermes-finance's own python (sys.executable). Maximum isolation
         #     and reproducibility; project deps and relative paths won't work.
         # Env scrubbing (strips *_API_KEY, *_TOKEN, *_SECRET, ...) and the
         # tool whitelist apply identically in both modes.
         "mode": "project",
     },
 
-    # Logging — controls file logging to ~/.hermes/logs/.
+    # Logging — controls file logging to ~/.hermes-finance/logs/.
     # agent.log captures INFO+ (all agent activity); errors.log captures WARNING+.
     "logging": {
         "level": "INFO",       # Minimum level for agent.log: DEBUG, INFO, WARNING
@@ -1407,11 +1407,11 @@ DEFAULT_CONFIG = {
     # Remotely-hosted model catalog manifest.  When enabled, the CLI fetches
     # curated model lists for OpenRouter and Nous Portal from this URL,
     # falling back to the in-repo snapshot on network failure.  Lets us
-    # update model picker lists without shipping a hermes-agent release.
+    # update model picker lists without shipping a hermes-finance release.
     # The default URL is served by the docs site GitHub Pages deploy.
     "model_catalog": {
         "enabled": True,
-        "url": "https://hermes-agent.nousresearch.com/docs/api/model-catalog.json",
+        "url": "https://solthodox.github.io/hermes-finance/api/model-catalog.json",
         # Disk cache TTL in hours.  Beyond this, the CLI refetches on the
         # next /model or `hermes model` invocation; network failures
         # silently fall back to the stale cache.
@@ -1433,7 +1433,7 @@ DEFAULT_CONFIG = {
         "force_ipv4": False,
     },
 
-    # Session storage — controls automatic cleanup of ~/.hermes/state.db.
+    # Session storage — controls automatic cleanup of ~/.hermes-finance/state.db.
     # state.db accumulates every session, message, tool call, and FTS5 index
     # entry forever.  Without auto-pruning, a heavy user (gateway + cron)
     # reports 384MB+ databases with 68K+ messages, which slows down FTS5
@@ -1982,6 +1982,94 @@ OPTIONAL_ENV_VARS = {
         "password": True,
         "category": "tool",
     },
+    "ALPHA_VANTAGE_API_KEY": {
+        "description": "Alpha Vantage API key for finance market-data MCP access",
+        "prompt": "Alpha Vantage API key",
+        "url": "https://www.alphavantage.co/support/#api-key",
+        "tools": ["mcp_alphavantage_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "COINGECKO_DEMO_API_KEY": {
+        "description": "CoinGecko demo API key for higher-rate crypto market-data access",
+        "prompt": "CoinGecko demo API key",
+        "url": "https://www.coingecko.com/en/api",
+        "tools": ["mcp_coingecko_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "COINGECKO_PRO_API_KEY": {
+        "description": "CoinGecko pro API key for authenticated crypto market-data access",
+        "prompt": "CoinGecko pro API key",
+        "url": "https://www.coingecko.com/en/api/pricing",
+        "tools": ["mcp_coingecko_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "POLYMARKET_PRIVATE_KEY": {
+        "description": "Private key for live Polymarket MCP trading",
+        "prompt": "Polymarket private key",
+        "url": "https://polymarket.com/",
+        "tools": ["mcp_polymarket_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "POLYMARKET_FUNDER": {
+        "description": "Polymarket proxy/funder address used by the trading MCP",
+        "prompt": "Polymarket funder address",
+        "url": "https://polymarket.com/",
+        "tools": ["mcp_polymarket_*"],
+        "password": False,
+        "category": "tool",
+    },
+    "HYPERLIQUID_PRIVATE_KEY": {
+        "description": "Private key for live Hyperliquid MCP trading",
+        "prompt": "Hyperliquid private key",
+        "url": "https://app.hyperliquid.xyz/",
+        "tools": ["mcp_hyperliquid_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "HYPERLIQUID_ACCOUNT_ADDRESS": {
+        "description": "Hyperliquid account address for agent/API wallet mode",
+        "prompt": "Hyperliquid account address",
+        "url": "https://app.hyperliquid.xyz/",
+        "tools": ["mcp_hyperliquid_*"],
+        "password": False,
+        "category": "tool",
+    },
+    "HYPERLIQUID_VAULT_ADDRESS": {
+        "description": "Optional Hyperliquid vault address for vault trading mode",
+        "prompt": "Hyperliquid vault address",
+        "url": "https://app.hyperliquid.xyz/",
+        "tools": ["mcp_hyperliquid_*"],
+        "password": False,
+        "category": "tool",
+    },
+    "ALPACA_API_KEY": {
+        "description": "Alpaca API key for equities/options/crypto MCP trading",
+        "prompt": "Alpaca API key",
+        "url": "https://app.alpaca.markets/paper/dashboard/overview",
+        "tools": ["mcp_alpaca_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "ALPACA_SECRET_KEY": {
+        "description": "Alpaca secret key for equities/options/crypto MCP trading",
+        "prompt": "Alpaca secret key",
+        "url": "https://app.alpaca.markets/paper/dashboard/overview",
+        "tools": ["mcp_alpaca_*"],
+        "password": True,
+        "category": "tool",
+    },
+    "OBSIDIAN_API_KEY": {
+        "description": "Obsidian Local REST API key for optional Obsidian MCP access",
+        "prompt": "Obsidian API key",
+        "url": "https://github.com/coddingtonbear/obsidian-local-rest-api",
+        "tools": ["mcp_obsidian_*"],
+        "password": True,
+        "category": "tool",
+    },
     "SEARXNG_URL": {
         "description": "URL of your SearXNG instance for free self-hosted web search",
         "prompt": "SearXNG URL (e.g. http://localhost:8080)",
@@ -2494,7 +2582,7 @@ OPTIONAL_ENV_VARS = {
         "advanced": True,
     },
     "API_SERVER_MODEL_NAME": {
-        "description": "Model name advertised on /v1/models. Defaults to the profile name (or 'hermes-agent' for the default profile). Useful for multi-user setups with OpenWebUI.",
+        "description": "Model name advertised on /v1/models. Defaults to the profile name (or 'hermes-finance' for the default profile). Useful for multi-user setups with OpenWebUI.",
         "prompt": "API server model name",
         "url": None,
         "password": False,
@@ -3239,7 +3327,7 @@ def warn_deprecated_cwd_env_vars(config: Optional[Dict[str, Any]] = None) -> Non
             f"this is deprecated."
         )
     if lines:
-        hint_path = os.environ.get("HERMES_HOME", "~/.hermes")
+        hint_path = os.environ.get("HERMES_HOME", "~/.hermes-finance")
         lines.insert(0, "\033[33m⚠ Deprecated .env settings detected:\033[0m")
         lines.append(
             f"  \033[2mMove to config.yaml instead:  "
@@ -3610,7 +3698,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
     #   2. Writes the `auxiliary.curator` aux-task slot (provider, model,
     #      base_url, api_key, timeout, extra_body) — canonical slot for
     #      routing the curator fork to a cheaper aux model.
-    #   3. Creates `~/.hermes/logs/curator/` if missing (belt-and-suspenders
+    #   3. Creates `~/.hermes-finance/logs/curator/` if missing (belt-and-suspenders
     #      on top of ensure_hermes_home() — old profiles that predate this
     #      migration still benefit).
     if current_ver < 23:
@@ -4043,7 +4131,7 @@ def cfg_get(cfg: Optional[Dict[str, Any]], *keys: str, default: Any = None) -> A
 
 
 def read_raw_config() -> Dict[str, Any]:
-    """Read ~/.hermes/config.yaml as-is, without merging defaults or migrating.
+    """Read ~/.hermes-finance/config.yaml as-is, without merging defaults or migrating.
 
     Returns the raw YAML dict, or ``{}`` if the file doesn't exist or can't
     be parsed.  Use this for lightweight config reads where you just need a
@@ -4081,7 +4169,7 @@ def read_raw_config() -> Dict[str, Any]:
 
 
 def load_config() -> Dict[str, Any]:
-    """Load configuration from ~/.hermes/config.yaml.
+    """Load configuration from ~/.hermes-finance/config.yaml.
 
     Cached on the config file's (mtime_ns, size). Returns a deepcopy of
     the cached value when unchanged, since most call sites mutate the
@@ -4209,7 +4297,7 @@ _COMMENTED_SECTIONS = """
 
 
 def save_config(config: Dict[str, Any]):
-    """Save configuration to ~/.hermes/config.yaml."""
+    """Save configuration to ~/.hermes-finance/config.yaml."""
     with _CONFIG_LOCK:
         if is_managed():
             managed_error("save configuration")
@@ -4253,7 +4341,7 @@ def save_config(config: Dict[str, Any]):
 
 
 def load_env() -> Dict[str, str]:
-    """Load environment variables from ~/.hermes/.env.
+    """Load environment variables from ~/.hermes-finance/.env.
 
     Sanitizes lines before parsing so that corrupted files (e.g.
     concatenated KEY=VALUE pairs on a single line) are handled
@@ -4343,7 +4431,7 @@ def _sanitize_env_lines(lines: list) -> list:
 
 
 def sanitize_env_file() -> int:
-    """Read, sanitize, and rewrite ~/.hermes/.env in place.
+    """Read, sanitize, and rewrite ~/.hermes-finance/.env in place.
 
     Returns the number of lines that were fixed (concatenation splits +
     placeholder removals).  Returns 0 when no changes are needed.
@@ -4428,7 +4516,7 @@ def _check_non_ascii_credential(key: str, value: str) -> str:
 
 
 def save_env_value(key: str, value: str):
-    """Save or update a value in ~/.hermes/.env."""
+    """Save or update a value in ~/.hermes-finance/.env."""
     if is_managed():
         managed_error(f"set {key}")
         return
@@ -4498,7 +4586,7 @@ def save_env_value(key: str, value: str):
 
 
 def remove_env_value(key: str) -> bool:
-    """Remove a key from ~/.hermes/.env and os.environ.
+    """Remove a key from ~/.hermes-finance/.env and os.environ.
 
     Returns True if the key was found and removed, False otherwise.
     """
@@ -4585,7 +4673,7 @@ def save_env_value_secure(key: str, value: str) -> Dict[str, Any]:
 
 
 def reload_env() -> int:
-    """Re-read ~/.hermes/.env into os.environ. Returns count of vars updated.
+    """Re-read ~/.hermes-finance/.env into os.environ. Returns count of vars updated.
 
     Adds/updates vars that changed and removes vars that were deleted from
     the .env file (but only vars known to Hermes — OPTIONAL_ENV_VARS and
@@ -4607,7 +4695,7 @@ def reload_env() -> int:
 
 
 def get_env_value(key: str) -> Optional[str]:
-    """Get a value from ~/.hermes/.env or environment."""
+    """Get a value from ~/.hermes-finance/.env or environment."""
     # Check environment first
     if key in os.environ:
         return os.environ[key]
@@ -4637,7 +4725,7 @@ def show_config():
     
     print()
     print(color("┌─────────────────────────────────────────────────────────┐", Colors.CYAN))
-    print(color("│              ⚕ Hermes Configuration                    │", Colors.CYAN))
+    print(color("│           ⚕ Hermes Finance Configuration               │", Colors.CYAN))
     print(color("└─────────────────────────────────────────────────────────┘", Colors.CYAN))
     
     # Paths
@@ -4661,6 +4749,13 @@ def show_config():
         ("BROWSERBASE_API_KEY", "Browserbase"),
         ("BROWSER_USE_API_KEY", "Browser Use"),
         ("FAL_KEY", "FAL"),
+        ("ALPHA_VANTAGE_API_KEY", "Alpha Vantage"),
+        ("COINGECKO_DEMO_API_KEY", "CoinGecko Demo"),
+        ("COINGECKO_PRO_API_KEY", "CoinGecko Pro"),
+        ("POLYMARKET_PRIVATE_KEY", "Polymarket"),
+        ("HYPERLIQUID_PRIVATE_KEY", "Hyperliquid"),
+        ("ALPACA_API_KEY", "Alpaca"),
+        ("OBSIDIAN_API_KEY", "Obsidian MCP"),
     ]
     
     for env_key, name in keys:
@@ -4852,7 +4947,11 @@ def set_config_value(key: str, value: str):
         'FIRECRAWL_GATEWAY_URL', 'TOOL_GATEWAY_DOMAIN', 'TOOL_GATEWAY_SCHEME',
         'TOOL_GATEWAY_USER_TOKEN', 'TAVILY_API_KEY',
         'BROWSERBASE_API_KEY', 'BROWSERBASE_PROJECT_ID', 'BROWSER_USE_API_KEY',
-        'FAL_KEY', 'TELEGRAM_BOT_TOKEN', 'DISCORD_BOT_TOKEN',
+        'FAL_KEY', 'ALPHA_VANTAGE_API_KEY', 'COINGECKO_DEMO_API_KEY', 'COINGECKO_PRO_API_KEY',
+        'POLYMARKET_PRIVATE_KEY', 'POLYMARKET_FUNDER', 'POLYMARKET_API_KEY', 'POLYMARKET_API_SECRET',
+        'POLYMARKET_PASSPHRASE', 'HYPERLIQUID_PRIVATE_KEY', 'HYPERLIQUID_ACCOUNT_ADDRESS',
+        'HYPERLIQUID_VAULT_ADDRESS', 'ALPACA_API_KEY', 'ALPACA_SECRET_KEY', 'OBSIDIAN_API_KEY',
+        'TELEGRAM_BOT_TOKEN', 'DISCORD_BOT_TOKEN',
         'TERMINAL_SSH_HOST', 'TERMINAL_SSH_USER', 'TERMINAL_SSH_KEY',
         'SUDO_PASSWORD', 'SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN',
         'GITHUB_TOKEN', 'HONCHO_API_KEY', 'WANDB_API_KEY',

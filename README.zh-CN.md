@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Hermes Finance" width="100%">
+  <img src="assets/hermes-finance-banner.svg" alt="Hermes Finance" width="100%">
 </p>
 
 # Hermes Finance ☤

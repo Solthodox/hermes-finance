@@ -9,7 +9,7 @@ displayed_sidebar: docs
 
 # Hermes Finance
 
-Hermes Finance is a pragmatic, analytic finance AI agent fork. It is built on Hermes Agent by [Nous Research](https://nousresearch.com), but packaged as a finance-specific distribution with its own installer, isolated home, Obsidian wiki, MCP stack, and trading/risk skills.
+Hermes Finance is a pragmatic, analytic finance AI agent fork. It is a finance-specific distribution with its own installer, isolated home, Obsidian wiki, MCP stack, and trading/risk skills.
 
 <div style={{display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap'}}>
   <a href="/docs/getting-started/installation" style={{display: 'inline-block', padding: '0.6rem 1.2rem', backgroundColor: '#FFD700', color: '#07070d', borderRadius: '8px', fontWeight: 600, textDecoration: 'none'}}>Get Started →</a>
