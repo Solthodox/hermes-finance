@@ -93,7 +93,11 @@ Direct trading MCPs are live-fire once enabled. They require an explicit flag:
 hermes-finance
 ```
 
-The wrapper sets `HERMES_HOME` to the isolated home and unsets common inherited provider/trading credential variables. Put credentials in `~/.hermes-finance/.env` instead of relying on your shell environment.
+The wrapper sets `HERMES_HOME` to the isolated home, prepends `~/.hermes-finance/bin` to `PATH`, and unsets inherited provider, trading, and Telegram credential variables. Put credentials in `~/.hermes-finance/.env` instead of relying on your shell environment.
+
+The installer also creates `~/.hermes-finance/home` so local terminal subprocesses get an isolated `HOME` when the runtime honors profile home isolation. This prevents accidental `~/.hermes` lookups from shell shorthand such as `~/.hermes/.env`.
+
+Telegram is not shared with default Hermes. The finance-local `tg` helper reads only `~/.hermes-finance/.env`; if `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` are absent, it fails closed instead of using default Hermes credentials.
 
 ## Obsidian wiki
 

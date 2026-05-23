@@ -46,7 +46,9 @@ CREDENTIAL_ENV_KEYS = [
     "POLYMARKET_PRIVATE_KEY", "POLYMARKET_FUNDER", "POLYMARKET_API_KEY",
     "POLYMARKET_API_SECRET", "POLYMARKET_PASSPHRASE", "HYPERLIQUID_PRIVATE_KEY",
     "HYPERLIQUID_ACCOUNT_ADDRESS", "HYPERLIQUID_VAULT_ADDRESS", "ALPACA_API_KEY",
-    "ALPACA_SECRET_KEY", "OBSIDIAN_API_KEY",
+    "ALPACA_SECRET_KEY", "OBSIDIAN_API_KEY", "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_ALLOWED_USERS", "TELEGRAM_HOME_CHANNEL", "TELEGRAM_HOME_CHANNEL_NAME",
+    "TELEGRAM_CHAT_ID",
 ]
 
 
@@ -114,6 +116,59 @@ def install_root_helper_scripts(home: Path, *, repl: dict[str, str]) -> None:
     if ROOT_HELPER_SCRIPTS_DIR.exists():
         copy_tree_render(ROOT_HELPER_SCRIPTS_DIR, scripts_root, preserve_env=False, repl=repl)
 
+def install_finance_command_shims(home: Path) -> None:
+    bin_dir = home / "bin"
+    bin_dir.mkdir(parents=True, exist_ok=True)
+    tg = bin_dir / "tg"
+    content = """#!/usr/bin/env bash
+set -euo pipefail
+
+HF_HOME="${HERMES_HOME:-__HF_HOME__}"
+ENV_FILE="${HF_HOME}/.env"
+if [ -f "$ENV_FILE" ]; then
+  set -a
+  # shellcheck disable=SC1090
+  . "$ENV_FILE"
+  set +a
+fi
+
+CHAT_ID="${TELEGRAM_HOME_CHANNEL:-${TELEGRAM_CHAT_ID:-}}"
+if [ -z "${TELEGRAM_BOT_TOKEN:-}" ] || [ -z "$CHAT_ID" ]; then
+  echo "Hermes Finance Telegram is not configured." >&2
+  echo "Add TELEGRAM_BOT_TOKEN and TELEGRAM_HOME_CHANNEL to ${ENV_FILE}, then run hermes-finance setup gateway." >&2
+  exit 2
+fi
+
+if [ "${1:-}" = "-f" ]; then
+  if [ "$#" -lt 2 ]; then
+    echo "Usage: tg -f /path/to/file [caption]" >&2
+    exit 64
+  fi
+  FILE="$2"
+  CAPTION="${3:-}"
+  if [ ! -f "$FILE" ]; then
+    echo "Error: file not found: $FILE" >&2
+    exit 66
+  fi
+  curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument" \
+    -F chat_id="$CHAT_ID" \
+    -F document=@"$FILE" \
+    -F caption="$CAPTION" >/dev/null
+else
+  if [ "$#" -eq 0 ]; then
+    echo "Usage: tg \"message\" | tg -f /path/to/file [caption]" >&2
+    exit 64
+  fi
+  curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+    -d chat_id="$CHAT_ID" \
+    -d text="$*" \
+    -d disable_web_page_preview=true >/dev/null
+fi
+""".replace("__HF_HOME__", str(home))
+    tg.write_text(content, encoding="utf-8")
+    os.chmod(tg, 0o755)
+
+
 
 def write_wrapper(path: Path, home: Path) -> None:
     unset_lines = "\n".join(f"unset {key}" for key in CREDENTIAL_ENV_KEYS)
@@ -125,6 +180,7 @@ def write_wrapper(path: Path, home: Path) -> None:
         f"{unset_lines}\n"
         f"export HERMES_HOME=\"{home}\"\n"
         f"export HERMES_OPTIONAL_SKILLS=\"{REPO}/optional-skills\"\n"
+        f"export PATH=\"{home}/bin:$PATH\"\n"
         f"exec \"{REPO}/venv/bin/hermes-finance\" \"$@\"\n"
     )
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -155,7 +211,8 @@ def main() -> int:
     copy_tree_render(HOME_TEMPLATE, args.home.expanduser(), preserve_env=not args.reset_env, repl=repl)
     install_root_skills(args.home.expanduser(), repl=repl)
     install_root_helper_scripts(args.home.expanduser(), repl=repl)
-    for sub in ["logs", "sessions", "state", "cache", "workspace"]:
+    install_finance_command_shims(args.home.expanduser())
+    for sub in ["logs", "sessions", "state", "cache", "workspace", "home"]:
         (args.home.expanduser() / sub).mkdir(parents=True, exist_ok=True)
 
     write_wrapper(args.wrapper.expanduser(), args.home.expanduser())
