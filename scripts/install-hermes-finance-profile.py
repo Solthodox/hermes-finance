@@ -209,6 +209,10 @@ def main() -> int:
 
     args.home.expanduser().mkdir(parents=True, exist_ok=True)
     copy_tree_render(HOME_TEMPLATE, args.home.expanduser(), preserve_env=not args.reset_env, repl=repl)
+    env_path = args.home.expanduser() / ".env"
+    env_example_path = args.home.expanduser() / ".env.example"
+    if not env_path.exists() and env_example_path.exists():
+        shutil.copy2(env_example_path, env_path)
     install_root_skills(args.home.expanduser(), repl=repl)
     install_root_helper_scripts(args.home.expanduser(), repl=repl)
     install_finance_command_shims(args.home.expanduser())
