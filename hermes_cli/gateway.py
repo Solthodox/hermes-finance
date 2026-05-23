@@ -82,7 +82,7 @@ def _get_service_pids() -> set:
         for scope_args in [["systemctl", "--user"], ["systemctl"]]:
             try:
                 result = subprocess.run(
-                    scope_args + ["list-units", "hermes-gateway*",
+                    scope_args + ["list-units", "hermes-finance-gateway*",
                                   "--plain", "--no-legend", "--no-pager"],
                     capture_output=True, text=True, timeout=5,
                 )
@@ -1252,8 +1252,8 @@ def _windows_gateway_should_absorb_console_controls() -> bool:
 # Service Configuration
 # =============================================================================
 
-_SERVICE_BASE = "hermes-gateway"
-SERVICE_DESCRIPTION = "Hermes Agent Gateway - Messaging Platform Integration"
+_SERVICE_BASE = "hermes-finance-gateway"
+SERVICE_DESCRIPTION = "Hermes Finance Gateway - Messaging Platform Integration"
 
 
 def _profile_suffix() -> str:
@@ -1314,8 +1314,8 @@ def _profile_arg(hermes_home: str | None = None) -> str:
 def get_service_name() -> str:
     """Derive a systemd service name scoped to this HERMES_HOME.
 
-    Default ``~/.hermes`` returns ``hermes-gateway`` (backward compatible).
-    Profile ``~/.hermes/profiles/coder`` returns ``hermes-gateway-coder``.
+    Default Hermes Finance home returns ``hermes-finance-gateway``.
+    Profile-like homes return ``hermes-finance-gateway-<suffix>``.
     Any other HERMES_HOME appends a short hash for uniqueness.
     """
     suffix = _profile_suffix()
@@ -2447,8 +2447,8 @@ def systemd_install(force: bool = False, system: bool = False, run_as_user: str 
     print(f"✓ {_service_scope_label(system).capitalize()} service installed and enabled!")
     print()
     print("Next steps:")
-    print(f"  {'sudo ' if system else ''}hermes gateway start{scope_flag}              # Start the service")
-    print(f"  {'sudo ' if system else ''}hermes gateway status{scope_flag}             # Check status")
+    print(f"  {'sudo ' if system else ''}hermes-finance gateway start{scope_flag}              # Start the service")
+    print(f"  {'sudo ' if system else ''}hermes-finance gateway status{scope_flag}             # Check status")
     print(f"  {'journalctl' if system else 'journalctl --user'} -u {get_service_name()} -f  # View logs")
     print()
 
@@ -2485,7 +2485,7 @@ def _require_service_installed(action: str, system: bool = False) -> None:
     if not unit_path.exists():
         scope_flag = " --system" if system else ""
         print(f"✗ Gateway service is not installed")
-        print(f"  Run: {'sudo ' if system else ''}hermes gateway install{scope_flag}")
+        print(f"  Run: {'sudo ' if system else ''}hermes-finance gateway install{scope_flag}")
         sys.exit(1)
 
 
