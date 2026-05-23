@@ -44,34 +44,36 @@ curl -fsSL https://raw.githubusercontent.com/Solthodox/hermes-finance/main/scrip
 
 ```bash
 source ~/.bashrc    # 重新加载 shell（或: source ~/.zshrc）
-hermes              # 开始对话！
+hermes-finance      # 开始对话！
 ```
+
+Hermes Finance 默认不预选任何 LLM 提供商/模型。安装后先运行 `hermes-finance setup model` 选择适合你预算、延迟、隐私和可靠性需求的提供商。DeepSeek 对许多用户是低成本起点，但只是推荐，不是预配置默认值。
 
 ---
 
 ## 快速入门
 
 ```bash
-hermes              # 交互式 CLI — 开始对话
-hermes model        # 选择 LLM 提供商和模型
-hermes tools        # 配置启用的工具
-hermes config set   # 设置单个配置项
-hermes gateway      # 启动消息网关（Telegram、Discord 等）
-hermes setup        # 运行完整设置向导（一次性配置所有内容）
+hermes-finance              # 交互式 CLI — 开始对话
+hermes-finance model        # 选择 LLM 提供商和模型
+hermes-finance tools        # 配置启用的工具
+hermes-finance config set   # 设置单个配置项
+hermes-finance gateway      # 启动消息网关（Telegram、Discord 等）
+hermes-finance setup        # 运行完整设置向导（一次性配置所有内容）
 hermes-finance claw migrate # 从 OpenClaw 迁移（如果来自 OpenClaw）
-hermes update       # 更新到最新版本
-hermes doctor       # 诊断问题
+hermes-finance update       # 更新到最新版本
+hermes-finance doctor       # 诊断问题
 ```
 
 📖 **[Hermes Finance 文档 →](https://solthodox.github.io/hermes-finance/docs/)**
 
 ## CLI 与消息平台 快速对照
 
-Hermes 有两种入口：用 `hermes` 启动终端 UI，或运行网关从 Telegram、Discord、Slack、WhatsApp、Signal 或 Email 与之对话。进入对话后，许多斜杠命令在两种界面中通用。
+Hermes Finance 有两种入口：用 `hermes-finance` 启动终端 UI，或运行网关从 Telegram、Discord、Slack、WhatsApp、Signal 或 Email 与之对话。进入对话后，许多斜杠命令在两种界面中通用。
 
 | 操作 | CLI | 消息平台 |
 |------|-----|----------|
-| 开始对话 | `hermes` | 运行 `hermes gateway setup` + `hermes gateway start`，然后给机器人发消息 |
+| 开始对话 | `hermes-finance` | 运行 `hermes-finance gateway setup` + `hermes-finance gateway start`，然后给机器人发消息 |
 | 开始新对话 | `/new` 或 `/reset` | `/new` 或 `/reset` |
 | 更换模型 | `/model [provider:model]` | `/model [provider:model]` |
 | 设置人格 | `/personality [name]` | `/personality [name]` |
@@ -113,7 +115,7 @@ Hermes 有两种入口：用 `hermes` 启动终端 UI，或运行网关从 Teleg
 
 如果你来自 OpenClaw，Hermes 可以自动导入你的设置、记忆、技能和 API 密钥。
 
-**首次安装时：** 安装向导（`hermes setup`）会自动检测 `~/.openclaw` 并在配置开始前提供迁移选项。
+**首次安装时：** 安装向导（`hermes-finance setup`）会自动检测 `~/.openclaw` 并在配置开始前提供迁移选项。
 
 **安装后任意时间：**
 

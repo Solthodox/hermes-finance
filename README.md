@@ -111,7 +111,7 @@ After install:
 hermes-finance
 ```
 
-Credentials start empty in `~/.hermes-finance/.env`. Check readiness with:
+Hermes Finance ships without a default LLM provider/model. Run `hermes-finance setup model` to choose one. DeepSeek is a reasonable low-cost starting point for many operators, but it is only a recommendation, not a preconfigured default. Credentials start empty in `~/.hermes-finance/.env`. Check readiness with:
 
 ```bash
 ~/.hermes-finance/scripts/check_mcp_readiness.py

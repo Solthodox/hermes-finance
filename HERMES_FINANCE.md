@@ -58,7 +58,9 @@ venv/bin/python scripts/install-hermes-finance-profile.py --vault "$HOME/Documen
 
 The installer preserves an existing `~/.hermes-finance/.env` by default. Use `--reset-env` only when intentionally replacing credentials with the empty template.
 
-## Configure credentials
+## Configure model and credentials
+
+Hermes Finance does not preselect a default LLM provider/model. Run `hermes-finance setup model` after install and choose the provider that fits your budget, latency, privacy, and reliability needs. DeepSeek is a reasonable low-cost starting point for many operators, but it is only a recommendation, not a configured default.
 
 Credentials start empty. Edit:
 

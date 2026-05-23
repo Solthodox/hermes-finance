@@ -2,14 +2,16 @@
 # Secrets live in {{HERMES_FINANCE_HOME}}/.env and are intentionally not copied from any other Hermes profile.
 _config_version: 23
 
-model:
-  default: deepseek-v4-pro
-  provider: deepseek
-  base_url: https://api.deepseek.com
+model: {}
 
-fallback_model:
-  provider: zai
-  model: glm-4-plus
+# Hermes Finance intentionally ships without a default provider/model.
+# Run `hermes-finance setup model` and choose the provider that fits your budget,
+# credentials, latency, and privacy requirements.
+
+# Optional fallback chain. Leave disabled until a primary provider/model exists.
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
 
 toolsets:
   - hermes-cli
