@@ -5354,7 +5354,7 @@ def cmd_version(args):
 
 
 def cmd_uninstall(args):
-    """Uninstall Hermes Agent."""
+    """Uninstall Hermes Finance."""
     _require_tty("uninstall")
     from hermes_cli.uninstall import run_uninstall
 
@@ -5927,7 +5927,7 @@ _warn_stale_dashboard_processes = _kill_stale_dashboard_processes
 
 
 def _update_via_zip(args):
-    """Update Hermes Agent by downloading a ZIP archive.
+    """Update Hermes Finance by downloading a ZIP archive.
 
     Used on Windows when git file I/O is broken (antivirus, NTFS filter
     drivers causing 'Invalid argument' errors on file creation).
@@ -7289,7 +7289,7 @@ def _run_pre_update_backup(args) -> None:
 
 
 def cmd_update(args):
-    """Update Hermes Agent to the latest version.
+    """Update Hermes Finance to the latest version.
 
     Thin wrapper around ``_cmd_update_impl``: installs hangup protection,
     runs the update, then restores stdio on the way out (even on
@@ -11336,7 +11336,7 @@ Examples:
     # =========================================================================
     update_parser = subparsers.add_parser(
         "update",
-        help="Update Hermes Agent to the latest version",
+        help="Update Hermes Finance to the latest version",
         description="Pull the latest changes from git and reinstall dependencies",
     )
     update_parser.add_argument(
@@ -11368,7 +11368,7 @@ Examples:
         "-y",
         action="store_true",
         default=False,
-        help="Assume yes for interactive prompts (config migration, stash restore). API-key entry is skipped; run 'hermes config migrate' separately for those.",
+        help="Assume yes for interactive prompts (config migration, stash restore). API-key entry is skipped; run 'hermes-finance config migrate' separately for those.",
     )
     update_parser.set_defaults(func=cmd_update)
 
@@ -11377,8 +11377,8 @@ Examples:
     # =========================================================================
     uninstall_parser = subparsers.add_parser(
         "uninstall",
-        help="Uninstall Hermes Agent",
-        description="Remove Hermes Agent from your system. Can keep configs/data for reinstall.",
+        help="Uninstall Hermes Finance",
+        description="Remove Hermes Finance from your system. Can keep configs/data for reinstall.",
     )
     uninstall_parser.add_argument(
         "--full",
@@ -11395,13 +11395,13 @@ Examples:
     # =========================================================================
     acp_parser = subparsers.add_parser(
         "acp",
-        help="Run Hermes Agent as an ACP (Agent Client Protocol) server",
-        description="Start Hermes Agent in ACP mode for editor integration (VS Code, Zed, JetBrains)",
+        help="Run Hermes Finance as an ACP (Agent Client Protocol) server",
+        description="Start Hermes Finance in ACP mode for editor integration (VS Code, Zed, JetBrains)",
     )
     _add_accept_hooks_flag(acp_parser)
 
     def cmd_acp(args):
-        """Launch Hermes Agent as an ACP server."""
+        """Launch Hermes Finance as an ACP server."""
         try:
             from acp_adapter.entry import main as acp_main
 

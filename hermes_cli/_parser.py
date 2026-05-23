@@ -48,27 +48,27 @@ Examples:
     hermes-finance logout         Clear stored authentication
     hermes-finance auth add <provider> Add a pooled credential
     hermes-finance auth list      List pooled credentials
-    hermes auth remove <p> <t>    Remove pooled credential by index, id, or label
-    hermes auth reset <provider>  Clear exhaustion status for a provider
-    hermes model                  Select default model
-    hermes fallback [list]        Show fallback provider chain
-    hermes fallback add           Add a fallback provider (same picker as `hermes model`)
-    hermes fallback remove        Remove a fallback provider from the chain
-    hermes config                 View configuration
-    hermes config edit            Edit config in $EDITOR
-    hermes config set model gpt-4 Set a config value
+    hermes-finance auth remove <p> <t>    Remove pooled credential by index, id, or label
+    hermes-finance auth reset <provider>  Clear exhaustion status for a provider
+    hermes-finance model                  Select default model
+    hermes-finance fallback [list]        Show fallback provider chain
+    hermes-finance fallback add           Add a fallback provider (same picker as `hermes-finance model`)
+    hermes-finance fallback remove        Remove a fallback provider from the chain
+    hermes-finance config                 View configuration
+    hermes-finance config edit            Edit config in $EDITOR
+    hermes-finance config set model gpt-4 Set a config value
     hermes-finance gateway        Run messaging gateway
     hermes-finance -s hermes-finance-dev,github-auth
-    hermes -w                     Start in isolated git worktree
+    hermes-finance -w                     Start in isolated git worktree
     hermes-finance gateway install Install gateway background service
-    hermes sessions list          List past sessions
-    hermes sessions browse        Interactive session picker
-    hermes sessions rename ID T   Rename/title a session
-    hermes logs                   View agent.log (last 50 lines)
-    hermes logs -f                Follow agent.log in real time
-    hermes logs errors            View errors.log
-    hermes logs --since 1h        Lines from the last hour
-    hermes debug share             Upload debug report for support
+    hermes-finance sessions list          List past sessions
+    hermes-finance sessions browse        Interactive session picker
+    hermes-finance sessions rename ID T   Rename/title a session
+    hermes-finance logs                   View agent.log (last 50 lines)
+    hermes-finance logs -f                Follow agent.log in real time
+    hermes-finance logs errors            View errors.log
+    hermes-finance logs --since 1h        Lines from the last hour
+    hermes-finance debug share             Upload debug report for support
     hermes-finance update         Update to latest version
     hermes-finance dashboard      Start web UI dashboard (port 9119)
     hermes-finance dashboard --stop Stop running dashboard processes
