@@ -61,8 +61,8 @@ def main() -> int:
     content_pages = [p for p in mds if p.name not in {'index.md','SCHEMA.md','log.md'}]
     if len(content_pages) < 80:
         errors.append(f'only {len(content_pages)} content pages, expected >=80')
-    if len(content_pages) > 120:
-        errors.append(f'{len(content_pages)} content pages, expected <=120')
+    if len(content_pages) > 130:
+        errors.append(f'{len(content_pages)} content pages, expected <=130')
     if errors:
         print('FAIL finance vault lint')
         for err in errors:

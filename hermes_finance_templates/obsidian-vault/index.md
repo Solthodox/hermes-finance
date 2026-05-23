@@ -5,13 +5,13 @@ type: index
 tags: [llmwiki, obsidian, research]
 status: seed
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-05-23
 source_quality: seed-synthesis
 ---
 
 # Hermes Finance Index
 
-This is the routing table for Hermes Finance. It indexes 114 notes plus itself. Read this first, then follow only the links needed for the current decision or research task.
+This is the routing table for Hermes Finance. It indexes 125 notes plus itself. Read this first, then follow only the links needed for the current decision or research task.
 
 ## Start here
 
@@ -29,6 +29,14 @@ This is the routing table for Hermes Finance. It indexes 114 notes plus itself. 
 - [[ingestion-playbook]] — Procedure for turning raw articles, papers, API dumps, and trade logs into durable notes.
 - [[lint-checklist]] — Checklist for keeping the vault navigable, cited, indexed, and free of stale operational clutter.
 - [[source-quality]] — Ranks evidence by proximity to primary data, recency, incentives, reproducibility, and adversarial robustness.
+
+## raw
+
+- [[market-data-mcp-source-cards]] — Primary-source setup and safety notes for CoinGecko, Alpha Vantage, Exa, and Firecrawl MCP usage.
+- [[trading-venue-api-source-cards]] — Primary-source setup and safety notes for Polymarket CLOB and Hyperliquid API usage.
+- [[position-sizing-and-portfolio-theory-source-cards]] — Canonical literature cards for Kelly sizing, Markowitz allocation, Black-Litterman intuition, and robust portfolios.
+- [[market-microstructure-and-execution-source-cards]] — Canonical literature cards for spreads, adverse selection, price impact, market making, and optimal execution.
+- [[raw-data-dictionary]] — Data dictionary for seed JSON/CSV fixtures under `raw/api-dumps/` and `raw/assets/`.
 
 ## concepts
 

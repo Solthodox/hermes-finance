@@ -1,0 +1,31 @@
+{
+  "fixture": true,
+  "source": "alphavantage_mcp",
+  "captured_at": "2026-05-23T00:00:00Z",
+  "query": {
+    "tool": "TIME_SERIES_DAILY_ADJUSTED",
+    "symbol": "AAPL",
+    "outputsize": "compact"
+  },
+  "data": {
+    "Meta Data": {
+      "1. Information": "Daily Time Series with Splits and Dividend Events",
+      "2. Symbol": "AAPL",
+      "3. Last Refreshed": "2026-05-22",
+      "5. Time Zone": "US/Eastern"
+    },
+    "Time Series (Daily)": {
+      "2026-05-22": {
+        "1. open": "200.0000",
+        "2. high": "203.0000",
+        "3. low": "198.0000",
+        "4. close": "202.0000",
+        "5. adjusted close": "202.0000",
+        "6. volume": "50000000",
+        "7. dividend amount": "0.0000",
+        "8. split coefficient": "1.0"
+      }
+    }
+  },
+  "notes": "Synthetic fixture for response-shape tests only. Do not use as market data."
+}

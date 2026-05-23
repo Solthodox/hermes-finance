@@ -1,0 +1,49 @@
+{
+  "fixture": true,
+  "source": "polymarket_clob",
+  "captured_at": "2026-05-23T00:00:00Z",
+  "purpose": "Synthetic BUY/SELL netting fixture for condition_id + outcome accounting.",
+  "trades": [
+    {
+      "match_time": "2026-05-20T10:00:00Z",
+      "condition_id": "0xconditionexample",
+      "market": "Example binary market",
+      "outcome": "Yes",
+      "side": "BUY",
+      "price": "0.40",
+      "size": "10.0"
+    },
+    {
+      "match_time": "2026-05-20T11:00:00Z",
+      "condition_id": "0xconditionexample",
+      "market": "Example binary market",
+      "outcome": "yes",
+      "side": "SELL",
+      "price": "0.55",
+      "size": "4.0"
+    },
+    {
+      "match_time": "2026-05-20T12:00:00Z",
+      "condition_id": "0xconditionexample",
+      "market": "Example binary market",
+      "outcome": "NO",
+      "side": "BUY",
+      "price": "0.62",
+      "size": "3.0"
+    }
+  ],
+  "expected_net": [
+    {
+      "condition_id": "0xconditionexample",
+      "outcome_normalized": "yes",
+      "net_units": "6.0",
+      "cash_cost": "1.80"
+    },
+    {
+      "condition_id": "0xconditionexample",
+      "outcome_normalized": "no",
+      "net_units": "3.0",
+      "cash_cost": "1.86"
+    }
+  ]
+}

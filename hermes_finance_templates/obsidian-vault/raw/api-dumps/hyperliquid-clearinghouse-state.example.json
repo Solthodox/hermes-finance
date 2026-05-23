@@ -1,0 +1,37 @@
+{
+  "fixture": true,
+  "source": "hyperliquid_info_user_state",
+  "captured_at": "2026-05-23T00:00:00Z",
+  "query": {
+    "endpoint": "https://api.hyperliquid.xyz/info",
+    "type": "clearinghouseState",
+    "user": "0x0000000000000000000000000000000000000000"
+  },
+  "data": {
+    "marginSummary": {
+      "accountValue": "1000.0",
+      "totalNtlPos": "250.0",
+      "totalRawUsd": "1000.0",
+      "totalMarginUsed": "25.0"
+    },
+    "crossMarginSummary": {
+      "accountValue": "1000.0",
+      "totalNtlPos": "250.0",
+      "totalRawUsd": "1000.0",
+      "totalMarginUsed": "25.0"
+    },
+    "assetPositions": [
+      {
+        "position": {
+          "coin": "ETH",
+          "szi": "0.10",
+          "entryPx": "3500.0",
+          "positionValue": "350.0",
+          "unrealizedPnl": "5.0",
+          "leverage": { "type": "cross", "value": 1 }
+        }
+      }
+    ]
+  },
+  "notes": "Synthetic fixture using zero address. Do not treat as live account state."
+}

@@ -1,0 +1,2 @@
+fixture,decision_id,opened_at,venue,instrument,thesis,side,size_usd,entry_price,exit_price,fees_usd,slippage_usd,realized_pnl_usd,rule_violations,postmortem
+true,example-001,2026-05-23T00:00:00Z,paper,EXAMPLE,"Synthetic example row only",long,10.00,1.0000,1.0500,0.01,0.02,0.47,none,false
