@@ -18,9 +18,9 @@ class TestBuildOrHeaders:
         from agent.auxiliary_client import build_or_headers
 
         headers = build_or_headers(or_config={"response_cache": False})
-        assert headers["HTTP-Referer"] == "https://hermes-agent.nousresearch.com"
-        assert headers["X-Title"] == "Hermes Agent"
-        assert headers["X-OpenRouter-Categories"] == "productivity,cli-agent"
+        assert headers["HTTP-Referer"] == "https://solthodox.github.io/hermes-finance"
+        assert headers["X-Title"] == "Hermes Finance"
+        assert headers["X-OpenRouter-Categories"] == "finance,productivity,cli-agent"
 
     def test_cache_enabled(self):
         """When response_cache is True, X-OpenRouter-Cache header is set."""

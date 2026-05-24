@@ -323,7 +323,7 @@ else
 fi
 
 # ============================================================================
-# PATH setup — symlink hermes into a user-facing bin dir
+# PATH setup — install an isolated hermes-finance launcher
 # ============================================================================
 
 echo -e "${CYAN}→${NC} Setting up hermes-finance command..."
@@ -332,8 +332,15 @@ HERMES_BIN="$SCRIPT_DIR/venv/bin/hermes-finance"
 COMMAND_LINK_DIR="$(get_command_link_dir)"
 COMMAND_LINK_DISPLAY_DIR="$(get_command_link_display_dir)"
 mkdir -p "$COMMAND_LINK_DIR"
-ln -sf "$HERMES_BIN" "$COMMAND_LINK_DIR/hermes-finance"
-echo -e "${GREEN}✓${NC} Symlinked hermes-finance → $COMMAND_LINK_DISPLAY_DIR/hermes-finance"
+cat > "$COMMAND_LINK_DIR/hermes-finance" <<EOF
+#!/usr/bin/env bash
+unset PYTHONPATH
+unset PYTHONHOME
+export HERMES_HOME="\${HERMES_HOME:-\$HOME/.hermes-finance}"
+exec "$HERMES_BIN" "\$@"
+EOF
+chmod +x "$COMMAND_LINK_DIR/hermes-finance"
+echo -e "${GREEN}✓${NC} Installed hermes-finance launcher → $COMMAND_LINK_DISPLAY_DIR/hermes-finance"
 
 if is_termux; then
     export PATH="$COMMAND_LINK_DIR:$PATH"

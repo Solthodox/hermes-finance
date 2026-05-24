@@ -8,8 +8,8 @@ Config files are stored in ~/.hermes-finance/ for easy access:
 This module provides:
 - hermes-finance config          - Show current configuration
 - hermes-finance config edit     - Open config in editor
-- hermes config set      - Set a specific value
-- hermes config wizard   - Re-run setup wizard
+- hermes-finance config set      - Set a specific value
+- hermes-finance config wizard   - Re-run setup wizard
 """
 
 import copy
@@ -65,7 +65,7 @@ def _warn_config_parse_failure(config_path: Path, exc: Exception) -> None:
     )
     logger.warning(msg)
     try:
-        sys.stderr.write(f"⚠️  hermes config: {msg}\n")
+        sys.stderr.write(f"⚠️  hermes-finance config: {msg}\n")
         sys.stderr.flush()
     except Exception:
         pass
@@ -201,7 +201,7 @@ def get_managed_update_command() -> Optional[str]:
 
 def recommended_update_command() -> str:
     """Return the best update command for the current installation."""
-    return get_managed_update_command() or "hermes update"
+    return get_managed_update_command() or "hermes-finance update"
 
 
 def format_managed_message(action: str = "modify this Hermes installation") -> str:
@@ -3282,7 +3282,7 @@ def print_config_warnings(config: Optional[Dict[str, Any]] = None) -> None:
     for ci in issues:
         marker = "\033[31m✗\033[0m" if ci.severity == "error" else "\033[33m⚠\033[0m"
         lines.append(f"  {marker} {ci.message}")
-    lines.append("  \033[2mRun 'hermes doctor' for fix suggestions.\033[0m")
+    lines.append("  \033[2mRun 'hermes-finance doctor' for fix suggestions.\033[0m")
     sys.stderr.write("\n".join(lines) + "\n\n")
 
 
@@ -3838,7 +3838,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
                         print(f"  ✓ Saved {name}")
                     print()
             else:
-                print("  Set later with: hermes config set <key> <value>")
+                print("  Set later with: hermes-finance config set <key> <value>")
     
     # Check for missing config fields
     missing_config = get_missing_config_fields()
@@ -3905,7 +3905,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
                 print()
             save_config(config)
         else:
-            print("  Set later with: hermes config set <key> <value>")
+            print("  Set later with: hermes-finance config set <key> <value>")
 
     return results
 
@@ -4880,8 +4880,8 @@ def show_config():
 
     print()
     print(color("─" * 60, Colors.DIM))
-    print(color("  hermes config edit     # Edit config file", Colors.DIM))
-    print(color("  hermes config set <key> <value>", Colors.DIM))
+    print(color("  hermes-finance config edit     # Edit config file", Colors.DIM))
+    print(color("  hermes-finance config set <key> <value>", Colors.DIM))
     print(color("  hermes setup           # Run setup wizard", Colors.DIM))
     print()
 
@@ -5036,12 +5036,12 @@ def config_command(args):
         key = getattr(args, 'key', None)
         value = getattr(args, 'value', None)
         if not key or value is None:
-            print("Usage: hermes config set <key> <value>")
+            print("Usage: hermes-finance config set <key> <value>")
             print()
             print("Examples:")
-            print("  hermes config set model anthropic/claude-sonnet-4")
-            print("  hermes config set terminal.backend docker")
-            print("  hermes config set OPENROUTER_API_KEY sk-or-...")
+            print("  hermes-finance config set model anthropic/claude-sonnet-4")
+            print("  hermes-finance config set terminal.backend docker")
+            print("  hermes-finance config set OPENROUTER_API_KEY sk-or-...")
             sys.exit(1)
         set_config_value(key, value)
     
@@ -5141,7 +5141,7 @@ def config_command(args):
         if missing_config:
             print()
             print(color(f"  {len(missing_config)} new config option(s) available", Colors.YELLOW))
-            print("    Run 'hermes config migrate' to add them")
+            print("    Run 'hermes-finance config migrate' to add them")
         
         print()
     
@@ -5149,13 +5149,13 @@ def config_command(args):
         print(f"Unknown config command: {subcmd}")
         print()
         print("Available commands:")
-        print("  hermes config           Show current configuration")
-        print("  hermes config edit      Open config in editor")
-        print("  hermes config set <key> <value>   Set a config value")
-        print("  hermes config check     Check for missing/outdated config")
-        print("  hermes config migrate   Update config with new options")
-        print("  hermes config path      Show config file path")
-        print("  hermes config env-path  Show .env file path")
+        print("  hermes-finance config           Show current configuration")
+        print("  hermes-finance config edit      Open config in editor")
+        print("  hermes-finance config set <key> <value>   Set a config value")
+        print("  hermes-finance config check     Check for missing/outdated config")
+        print("  hermes-finance config migrate   Update config with new options")
+        print("  hermes-finance config path      Show config file path")
+        print("  hermes-finance config env-path  Show .env file path")
         sys.exit(1)
 
 

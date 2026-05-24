@@ -369,7 +369,7 @@ def create_wrapper_script(name: str) -> Optional[Path]:
 
     wrapper_path = wrapper_dir / canon
     try:
-        wrapper_path.write_text(f'#!/bin/sh\nexec hermes -p {canon} "$@"\n')
+        wrapper_path.write_text(f'#!/bin/sh\nexec hermes-finance -p {canon} "$@"\n')
         wrapper_path.chmod(wrapper_path.stat().st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
         return wrapper_path
     except OSError as e:
@@ -384,7 +384,7 @@ def remove_wrapper_script(name: str) -> bool:
         try:
             # Verify it's our wrapper before removing
             content = wrapper_path.read_text()
-            if "hermes -p" in content:
+            if "hermes-finance -p" in content or "hermes -p" in content:
                 wrapper_path.unlink()
                 return True
         except Exception:
@@ -1301,11 +1301,11 @@ def rename_profile(old_name: str, new_name: str) -> Path:
 
 def generate_bash_completion() -> str:
     """Generate a bash completion script for hermes profile names."""
-    return '''# Hermes Agent profile completion
-# Add to ~/.bashrc: eval "$(hermes completion bash)"
+    return '''# Hermes Finance profile completion
+# Add to ~/.bashrc: eval "$(hermes-finance completion bash)"
 
 _hermes_profiles() {
-    local profiles_dir="$HOME/.hermes/profiles"
+    local profiles_dir="${HERMES_HOME:-$HOME/.hermes-finance}/profiles"
     local profiles="default"
     if [ -d "$profiles_dir" ]; then
         profiles="$profiles $(ls "$profiles_dir" 2>/dev/null)"
@@ -1351,9 +1351,9 @@ complete -F _hermes_completion hermes
 
 def generate_zsh_completion() -> str:
     """Generate a zsh completion script for hermes profile names."""
-    return '''#compdef hermes
-# Hermes Agent profile completion
-# Add to ~/.zshrc: eval "$(hermes completion zsh)"
+    return '''#compdef hermes-finance
+# Hermes Finance profile completion
+# Add to ~/.zshrc: eval "$(hermes-finance completion zsh)"
 
 _hermes() {
     local -a profiles

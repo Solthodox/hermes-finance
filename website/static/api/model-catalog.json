@@ -2,8 +2,8 @@
   "version": 1,
   "updated_at": "2026-05-11T16:41:16Z",
   "metadata": {
-    "source": "hermes-agent repo",
-    "docs": "https://hermes-agent.nousresearch.com/docs/reference/model-catalog"
+    "source": "hermes-finance repo",
+    "docs": "https://solthodox.github.io/hermes-finance/reference/model-catalog"
   },
   "providers": {
     "openrouter": {

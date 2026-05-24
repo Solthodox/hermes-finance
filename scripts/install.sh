@@ -1196,18 +1196,18 @@ setup_path() {
     log_info "Setting up hermes-finance command..."
 
     if [ "$USE_VENV" = true ]; then
-        HERMES_BIN="$INSTALL_DIR/venv/bin/hermes"
+        HERMES_BIN="$INSTALL_DIR/venv/bin/hermes-finance"
     else
-        HERMES_BIN="$(which hermes 2>/dev/null || echo "")"
+        HERMES_BIN="$(which hermes-finance 2>/dev/null || echo "")"
         if [ -z "$HERMES_BIN" ]; then
-            log_warn "hermes not found on PATH after install"
+            log_warn "hermes-finance not found on PATH after install"
             return 0
         fi
     fi
 
     # Verify the entry point script was actually generated
     if [ ! -x "$HERMES_BIN" ]; then
-        log_warn "hermes entry point not found at $HERMES_BIN"
+        log_warn "hermes-finance entry point not found at $HERMES_BIN"
         log_info "This usually means the pip install didn't complete successfully."
         if [ "$DISTRO" = "termux" ]; then
             log_info "Try: cd $INSTALL_DIR && python -m pip install -e '.[termux-all]' -c constraints-termux.txt"
@@ -1222,18 +1222,18 @@ setup_path() {
     command_link_dir="$(get_command_link_dir)"
     command_link_display_dir="$(get_command_link_display_dir)"
 
-    # Create a user-facing shim for the hermes command.
+    # Create a user-facing shim for the hermes-finance command.
     # We intentionally clear PYTHONPATH/PYTHONHOME here so inherited env vars
     # can't make this launcher import modules from another checkout.
     mkdir -p "$command_link_dir"
-    cat > "$command_link_dir/hermes" <<EOF
+    cat > "$command_link_dir/hermes-finance" <<EOF
 #!/usr/bin/env bash
 unset PYTHONPATH
 unset PYTHONHOME
 exec "$HERMES_BIN" "\$@"
 EOF
-    chmod +x "$command_link_dir/hermes"
-    log_success "Installed hermes launcher → $command_link_display_dir/hermes"
+    chmod +x "$command_link_dir/hermes-finance"
+    log_success "Installed hermes-finance launcher → $command_link_display_dir/hermes-finance"
 
     if [ "$DISTRO" = "termux" ]; then
         export PATH="$command_link_dir:$PATH"
@@ -1253,7 +1253,7 @@ EOF
         # Probe a fresh non-login interactive bash the way the user will use it.
         # `bash -i -c` sources ~/.bashrc but NOT ~/.bash_profile or /etc/profile,
         # which is the exact scenario where RHEL root loses /usr/local/bin.
-        if env -i HOME="$HOME" TERM="${TERM:-dumb}" bash -i -c 'command -v hermes' \
+        if env -i HOME="$HOME" TERM="${TERM:-dumb}" bash -i -c 'command -v hermes-finance' \
                 >/dev/null 2>&1; then
             log_info "/usr/local/bin is already on PATH for all shells"
             log_success "hermes-finance command ready"
@@ -1352,6 +1352,17 @@ EOF
 copy_config_templates() {
     log_info "Setting up configuration files..."
 
+    local command_link_dir
+    command_link_dir="$(get_command_link_dir)"
+    local finance_installer="$INSTALL_DIR/scripts/install-hermes-finance-profile.py"
+    if [ -f "$finance_installer" ] && [ "$USE_VENV" = true ] && [ -x "$INSTALL_DIR/venv/bin/python" ]; then
+        "$INSTALL_DIR/venv/bin/python" "$finance_installer" \
+            --home "$HERMES_HOME" \
+            --wrapper "$command_link_dir/hermes-finance"
+        log_success "Hermes Finance profile templates installed"
+        return 0
+    fi
+
     # Create ~/.hermes-finance directory structure (config at top level, code in subdir)
     mkdir -p "$HERMES_HOME"/{cron,sessions,logs,pairing,hooks,image_cache,audio_cache,memories,skills}
 
@@ -1370,9 +1381,18 @@ copy_config_templates() {
 
     # Create config.yaml at ~/.hermes-finance/config.yaml (top level, easy to find)
     if [ ! -f "$HERMES_HOME/config.yaml" ]; then
-        if [ -f "$INSTALL_DIR/cli-config.yaml.example" ]; then
-            cp "$INSTALL_DIR/cli-config.yaml.example" "$HERMES_HOME/config.yaml"
+        if [ -f "$INSTALL_DIR/hermes_finance_templates/home/config.yaml" ]; then
+            cp "$INSTALL_DIR/hermes_finance_templates/home/config.yaml" "$HERMES_HOME/config.yaml"
+            local finance_vault
+            finance_vault="${OBSIDIAN_VAULT:-$HOME/Vault}/Hermes-Finance"
+            sed -i.bak \
+                -e "s|{{HERMES_FINANCE_HOME}}|$HERMES_HOME|g" \
+                -e "s|{{HERMES_FINANCE_VAULT}}|$finance_vault|g" \
+                "$HERMES_HOME/config.yaml" && rm -f "$HERMES_HOME/config.yaml.bak"
             log_success "Created ~/.hermes-finance/config.yaml from template"
+        elif [ -f "$INSTALL_DIR/cli-config.yaml.example" ]; then
+            cp "$INSTALL_DIR/cli-config.yaml.example" "$HERMES_HOME/config.yaml"
+            log_success "Created ~/.hermes-finance/config.yaml from fallback template"
         fi
     else
         log_info "~/.hermes-finance/config.yaml already exists, keeping it"
@@ -1661,24 +1681,24 @@ print_success() {
     echo ""
     echo -e "${CYAN}${BOLD}🚀 Commands:${NC}"
     echo ""
-    echo -e "   ${GREEN}hermes${NC}              Start chatting"
+    echo -e "   ${GREEN}hermes-finance${NC}      Start chatting"
     echo -e "   ${GREEN}hermes-finance setup${NC}        Configure API keys & settings"
-    echo -e "   ${GREEN}hermes config${NC}       View/edit configuration"
-    echo -e "   ${GREEN}hermes config edit${NC}  Open config in editor"
+    echo -e "   ${GREEN}hermes-finance config${NC}       View/edit configuration"
+    echo -e "   ${GREEN}hermes-finance config edit${NC}  Open config in editor"
     echo -e "   ${GREEN}hermes-finance gateway install${NC} Install gateway service (messaging + cron)"
-    echo -e "   ${GREEN}hermes update${NC}       Update to latest version"
+    echo -e "   ${GREEN}hermes-finance update${NC}       Update to latest version"
     echo ""
 
     echo -e "${CYAN}─────────────────────────────────────────────────────────${NC}"
     echo ""
     if [ "$DISTRO" = "termux" ]; then
-        echo -e "${YELLOW}⚡ 'hermes' was linked into $(get_command_link_display_dir), which is already on PATH in Termux.${NC}"
+        echo -e "${YELLOW}⚡ 'hermes-finance' was linked into $(get_command_link_display_dir), which is already on PATH in Termux.${NC}"
         echo ""
     elif [ "$ROOT_FHS_LAYOUT" = true ]; then
-        echo -e "${YELLOW}⚡ 'hermes' was linked into /usr/local/bin and is ready to use — no shell reload needed.${NC}"
+        echo -e "${YELLOW}⚡ 'hermes-finance' was linked into /usr/local/bin and is ready to use — no shell reload needed.${NC}"
         echo ""
     else
-        echo -e "${YELLOW}⚡ Reload your shell to use 'hermes' command:${NC}"
+        echo -e "${YELLOW}⚡ Reload your shell to use 'hermes-finance' command:${NC}"
         echo ""
         LOGIN_SHELL="$(basename "${SHELL:-/bin/bash}")"
         if [ "$LOGIN_SHELL" = "zsh" ]; then

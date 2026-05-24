@@ -940,8 +940,8 @@ function Set-PathVariable {
         $hermesBin = "$InstallDir\venv\Scripts"
     }
     
-    # Add the venv Scripts dir to user PATH so hermes is globally available
-    # On Windows, the hermes.exe in venv\Scripts\ has the venv Python baked in
+    # Add the venv Scripts dir to user PATH so hermes-finance is globally available
+    # On Windows, the hermes-finance.exe in venv\Scripts\ has the venv Python baked in
     $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
     
     if ($currentPath -notlike "*$hermesBin*") {
@@ -1004,10 +1004,22 @@ function Copy-ConfigTemplates {
     # Create config.yaml
     $configPath = "$HermesHome\config.yaml"
     if (-not (Test-Path $configPath)) {
-        $examplePath = "$InstallDir\cli-config.yaml.example"
+        $examplePath = "$InstallDir\hermes_finance_templates\home\config.yaml"
         if (Test-Path $examplePath) {
             Copy-Item $examplePath $configPath
+            $vaultRoot = if ($env:OBSIDIAN_VAULT) { $env:OBSIDIAN_VAULT } else { Join-Path $HOME "Vault" }
+            $financeVault = Join-Path $vaultRoot "Hermes-Finance"
+            $configContent = (Get-Content $configPath -Raw)
+            $configContent = $configContent.Replace("{{HERMES_FINANCE_HOME}}", $HermesHome)
+            $configContent = $configContent.Replace("{{HERMES_FINANCE_VAULT}}", $financeVault)
+            [System.IO.File]::WriteAllText($configPath, $configContent, [System.Text.UTF8Encoding]::new($false))
             Write-Success "Created ~/.hermes-finance/config.yaml from template"
+        } else {
+            $fallbackPath = "$InstallDir\cli-config.yaml.example"
+            if (Test-Path $fallbackPath) {
+                Copy-Item $fallbackPath $configPath
+                Write-Success "Created ~/.hermes-finance/config.yaml from fallback template"
+            }
         }
     } else {
         Write-Info "~/.hermes-finance/config.yaml already exists, keeping it"
@@ -1363,9 +1375,9 @@ function Start-GatewayIfConfigured {
 
     if (-not $hasMessaging) { return }
 
-    $hermesCmd = "$InstallDir\venv\Scripts\hermes.exe"
+    $hermesCmd = "$InstallDir\venv\Scripts\hermes-finance.exe"
     if (-not (Test-Path $hermesCmd)) {
-        $hermesCmd = "hermes"
+        $hermesCmd = "hermes-finance"
     }
 
     # If WhatsApp is enabled but not yet paired, run foreground for QR scan
@@ -1435,17 +1447,17 @@ function Write-Completion {
     Write-Host ""
     Write-Host "🚀 Commands:" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "   hermes              " -NoNewline -ForegroundColor Green
+    Write-Host "   hermes-finance      " -NoNewline -ForegroundColor Green
     Write-Host "Start chatting"
     Write-Host "   hermes-finance setup        " -NoNewline -ForegroundColor Green
     Write-Host "Configure API keys & settings"
-    Write-Host "   hermes config       " -NoNewline -ForegroundColor Green
+    Write-Host "   hermes-finance config       " -NoNewline -ForegroundColor Green
     Write-Host "View/edit configuration"
-    Write-Host "   hermes config edit  " -NoNewline -ForegroundColor Green
+    Write-Host "   hermes-finance config edit  " -NoNewline -ForegroundColor Green
     Write-Host "Open config in editor"
     Write-Host "   hermes-finance gateway      " -NoNewline -ForegroundColor Green
     Write-Host "Start messaging gateway (Telegram, Discord, etc.)"
-    Write-Host "   hermes update       " -NoNewline -ForegroundColor Green
+    Write-Host "   hermes-finance update       " -NoNewline -ForegroundColor Green
     Write-Host "Update to latest version"
     Write-Host ""
     

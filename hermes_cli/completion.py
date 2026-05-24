@@ -97,9 +97,9 @@ def generate_bash(parser: argparse.ArgumentParser) -> str:
 
     cases_str = "\n".join(cases)
 
-    return f"""# Hermes Agent bash completion
+    return f"""# Hermes Finance bash completion
 # Add to ~/.bashrc:
-#   eval "$(hermes completion bash)"
+#   eval "$(hermes-finance completion bash)"
 
 _hermes_profiles() {{
     local profiles_dir="$HOME/.hermes/profiles"
@@ -197,10 +197,10 @@ def generate_zsh(parser: argparse.ArgumentParser) -> str:
             )
     sub_cases_str = "\n".join(sub_cases)
 
-    return f"""#compdef hermes
-# Hermes Agent zsh completion
+    return f"""#compdef hermes-finance
+# Hermes Finance zsh completion
 # Add to ~/.zshrc:
-#   eval "$(hermes completion zsh)"
+#   eval "$(hermes-finance completion zsh)"
 
 _hermes_profiles() {{
     local -a profiles
@@ -252,9 +252,9 @@ def generate_fish(parser: argparse.ArgumentParser) -> str:
     top_cmds_str = " ".join(top_cmds)
 
     lines: list[str] = [
-        "# Hermes Agent fish completion",
+        "# Hermes Finance fish completion",
         "# Add to your config:",
-        "#   hermes completion fish | source",
+        "#   hermes-finance completion fish | source",
         "",
         "# Helper: list available profiles",
         "function __hermes_profiles",

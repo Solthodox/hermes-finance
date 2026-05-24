@@ -3874,15 +3874,15 @@ def _rotate_worker_log(log_path: Path, max_bytes: int) -> None:
 
 
 def _resolve_hermes_argv() -> list[str]:
-    """Resolve the ``hermes`` invocation as argv parts for ``Popen``.
+    """Resolve the ``hermes-finance`` invocation as argv parts for ``Popen``.
 
     Tries in order:
 
-    1. ``shutil.which("hermes")`` — the console-script shim, the same form
+    1. ``shutil.which("hermes-finance")`` — the console-script shim, the same form
        that shows up in ``ps`` output and existing logs. Preferred so live
        systems' diagnostics stay familiar.
     2. ``sys.executable -m hermes_cli.main`` — fallback for setups where
-       Hermes is launched from a venv and the ``hermes`` shim is not on
+       Hermes Finance is launched from a venv and the ``hermes-finance`` shim is not on
        the dispatcher's ``$PATH`` (cron, systemd ``User=`` services,
        launchd jobs, detached processes, etc.). Goes through the running
        interpreter so the result is independent of ``$PATH``.
@@ -3893,7 +3893,7 @@ def _resolve_hermes_argv() -> list[str]:
     """
     import shutil
 
-    hermes_bin = shutil.which("hermes")
+    hermes_bin = shutil.which("hermes-finance")
     if hermes_bin:
         return [hermes_bin]
     # Fallback to the module form. ``hermes_cli.main`` is the actual
@@ -4028,8 +4028,8 @@ def _default_spawn(
     except FileNotFoundError:
         log_f.close()
         raise RuntimeError(
-            "`hermes` executable not found on PATH. "
-            "Install Hermes Agent or activate its venv before running the kanban dispatcher."
+            "`hermes-finance` executable not found on PATH. "
+            "Install Hermes Finance or activate its venv before running the kanban dispatcher."
         )
     # NOTE: we intentionally do NOT close log_f here — we want Popen's
     # child process to keep writing after this function returns.  The

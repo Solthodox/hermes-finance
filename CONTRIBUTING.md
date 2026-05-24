@@ -64,7 +64,7 @@ If your skill is specialized, community-contributed, or niche, it's better suite
 
 ```bash
 git clone --recurse-submodules https://github.com/Solthodox/hermes-finance.git
-cd hermes-agent
+cd hermes-finance
 
 # Create venv with Python 3.11
 uv venv venv --python 3.11
@@ -83,12 +83,12 @@ npm install
 ### Configure for development
 
 ```bash
-mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills}
-cp cli-config.yaml.example ~/.hermes/config.yaml
-touch ~/.hermes/.env
+mkdir -p ~/.hermes-finance/{cron,sessions,logs,memories,skills}
+cp hermes_finance_templates/home/config.yaml ~/.hermes-finance/config.yaml
+touch ~/.hermes-finance/.env
 
 # Add at minimum an LLM provider key:
-echo "OPENROUTER_API_KEY=***" >> ~/.hermes/.env
+echo "OPENROUTER_API_KEY=***" >> ~/.hermes-finance/.env
 ```
 
 ### Run
@@ -96,11 +96,11 @@ echo "OPENROUTER_API_KEY=***" >> ~/.hermes/.env
 ```bash
 # Symlink for global access
 mkdir -p ~/.local/bin
-ln -sf "$(pwd)/venv/bin/hermes" ~/.local/bin/hermes-finance
+ln -sf "$(pwd)/venv/bin/hermes-finance" ~/.local/bin/hermes-finance
 
 # Verify
 hermes-finance doctor
-hermes chat -q "Hello"
+hermes-finance chat -q "Hello"
 ```
 
 ### Run tests
@@ -182,23 +182,23 @@ hermes-finance/
 ├── tests/                    # Test suite
 ├── website/                  # Documentation site (solthodox.github.io/hermes-finance)
 │
-├── cli-config.yaml.example   # Example configuration (copied to ~/.hermes/config.yaml)
+├── cli-config.yaml.example   # Upstream-style example configuration
 └── AGENTS.md                 # Development guide for AI coding assistants
 ```
 
-### User configuration (stored in `~/.hermes/`)
+### User configuration (stored in `~/.hermes-finance/`)
 
 | Path | Purpose |
 |------|---------|
-| `~/.hermes/config.yaml` | Settings (model, terminal, toolsets, compression, etc.) |
-| `~/.hermes/.env` | API keys and secrets |
-| `~/.hermes/auth.json` | OAuth credentials (Nous Portal) |
-| `~/.hermes/skills/` | All active skills (bundled + hub-installed + agent-created) |
-| `~/.hermes/memories/` | Persistent memory (MEMORY.md, USER.md) |
-| `~/.hermes/state.db` | SQLite session database |
-| `~/.hermes/sessions/` | JSON session logs |
-| `~/.hermes/cron/` | Scheduled job data |
-| `~/.hermes/whatsapp/session/` | WhatsApp bridge credentials |
+| `~/.hermes-finance/config.yaml` | Settings (model, terminal, toolsets, compression, etc.) |
+| `~/.hermes-finance/.env` | API keys and secrets |
+| `~/.hermes-finance/auth.json` | OAuth credentials |
+| `~/.hermes-finance/skills/` | All active skills (bundled + hub-installed + agent-created) |
+| `~/.hermes-finance/memories/` | Persistent memory (MEMORY.md, USER.md) |
+| `~/.hermes-finance/state.db` | SQLite session database |
+| `~/.hermes-finance/sessions/` | JSON session logs |
+| `~/.hermes-finance/cron/` | Scheduled job data |
+| `~/.hermes-finance/whatsapp/session/` | WhatsApp bridge credentials |
 
 ---
 
@@ -449,7 +449,7 @@ prerequisites:
   commands: [curl, jq]            # Advisory CLI checks
 ```
 
-Gateway and messaging sessions never collect secrets in-band; they instruct the user to run `hermes-finance setup` or update `~/.hermes/.env` locally.
+Gateway and messaging sessions never collect secrets in-band; they instruct the user to run `hermes-finance setup` or update `~/.hermes-finance/.env` locally.
 
 **When to declare required environment variables:**
 - The skill uses an API key or token that should be collected securely at load time
@@ -476,7 +476,7 @@ Hermes uses a data-driven skin system — no code changes needed to add a new sk
 
 **Option A: User skin (YAML file)**
 
-Create `~/.hermes/skins/<name>.yaml`:
+Create `~/.hermes-finance/skins/<name>.yaml`:
 
 ```yaml
 name: mytheme

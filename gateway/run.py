@@ -990,15 +990,15 @@ def _resolve_hermes_bin() -> Optional[list[str]]:
     """Resolve the Hermes update command as argv parts.
 
     Tries in order:
-    1. ``shutil.which("hermes")`` — standard PATH lookup
+    1. ``shutil.which("hermes-finance")`` — standard PATH lookup
     2. ``sys.executable -m hermes_cli.main`` — fallback when Hermes is running
-       from a venv/module invocation and the ``hermes`` shim is not on PATH
+       from a venv/module invocation and the ``hermes-finance`` shim is not on PATH
 
     Returns argv parts ready for quoting/joining, or ``None`` if neither works.
     """
     import shutil
 
-    hermes_bin = shutil.which("hermes")
+    hermes_bin = shutil.which("hermes-finance")
     if hermes_bin:
         return [hermes_bin]
 
@@ -12287,10 +12287,10 @@ class GatewayRunner:
         return await loop.run_in_executor(None, _collect_and_upload)
 
     async def _handle_update_command(self, event: MessageEvent) -> str:
-        """Handle /update command — update Hermes Agent to the latest version.
+        """Handle /update command — update Hermes Finance to the latest version.
 
-        Spawns ``hermes update`` in a detached session (via ``setsid``) so it
-        survives the gateway restart that ``hermes update`` may trigger. Marker
+        Spawns ``hermes-finance update`` in a detached session (via ``setsid``) so it
+        survives the gateway restart that ``hermes-finance update`` may trigger. Marker
         files are written so either the current gateway process or the next one
         can notify the user when the update finishes.
         """
@@ -12314,7 +12314,7 @@ class GatewayRunner:
                 return t("gateway.update.platform_not_messaging")
 
         if is_managed():
-            return f"✗ {format_managed_message('update Hermes Agent')}"
+            return f"✗ {format_managed_message('update Hermes Finance')}"
 
         project_root = Path(__file__).parent.parent.resolve()
         git_dir = project_root / '.git'

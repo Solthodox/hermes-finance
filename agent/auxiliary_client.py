@@ -309,9 +309,9 @@ _PROVIDERS_WITHOUT_VISION: frozenset = frozenset({
 # `X-Title` is the canonical attribution header OpenRouter's dashboard
 # reads; the previous `X-OpenRouter-Title` label was not recognized there.
 _OR_HEADERS_BASE = {
-    "HTTP-Referer": "https://hermes-agent.nousresearch.com",
-    "X-Title": "Hermes Agent",
-    "X-OpenRouter-Categories": "productivity,cli-agent",
+    "HTTP-Referer": "https://solthodox.github.io/hermes-finance",
+    "X-Title": "Hermes Finance",
+    "X-OpenRouter-Categories": "finance,productivity,cli-agent",
 }
 
 # Truthy values for boolean env-var parsing.
@@ -374,9 +374,9 @@ def build_or_headers(or_config: dict | None = None) -> dict:
 from hermes_cli import __version__ as _HERMES_VERSION
 
 _AI_GATEWAY_HEADERS = {
-    "HTTP-Referer": "https://hermes-agent.nousresearch.com",
-    "X-Title": "Hermes Agent",
-    "User-Agent": f"HermesAgent/{_HERMES_VERSION}",
+    "HTTP-Referer": "https://solthodox.github.io/hermes-finance",
+    "X-Title": "Hermes Finance",
+    "User-Agent": f"HermesFinance/{_HERMES_VERSION}",
 }
 
 # Nous Portal extra_body for product attribution.
@@ -424,7 +424,7 @@ def _codex_cloudflare_headers(access_token: str) -> Dict[str, str]:
     crash at client construction.
     """
     headers = {
-        "User-Agent": "codex_cli_rs/0.0.0 (Hermes Agent)",
+        "User-Agent": "codex_cli_rs/0.0.0 (Hermes Finance)",
         "originator": "codex_cli_rs",
     }
     if not isinstance(access_token, str) or not access_token.strip():

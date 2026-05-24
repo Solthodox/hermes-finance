@@ -3,13 +3,13 @@ hermes fallback — manage the fallback provider chain.
 
 Fallback providers are tried in order when the primary model fails with
 rate-limit, overload, or connection errors. See:
-https://hermes-agent.nousresearch.com/docs/user-guide/features/fallback-providers
+https://solthodox.github.io/hermes-finance/docs/user-guide/features/fallback-providers
 
 Subcommands:
-  hermes fallback [list]   Show the current fallback chain (default when no subcommand)
-  hermes fallback add      Pick provider + model via the same picker as `hermes model`,
+  hermes-finance fallback [list]   Show the current fallback chain (default when no subcommand)
+  hermes-finance fallback add      Pick provider + model via the same picker as `hermes-finance model`,
                            then append the selection to the chain
-  hermes fallback remove   Pick an entry to delete from the chain
+  hermes-finance fallback remove   Pick an entry to delete from the chain
   hermes fallback clear    Remove all fallback entries
 
 Storage: ``fallback_providers`` in ``~/.hermes/config.yaml`` (top-level, list of
@@ -135,7 +135,7 @@ def cmd_fallback_list(args) -> None:  # noqa: ARG001
         print(f"    {i}. {_format_entry(entry)}")
     print()
     print("  Tried in order when the primary fails (rate-limit, 5xx, connection errors).")
-    print("  Docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/fallback-providers")
+    print("  Docs: https://solthodox.github.io/hermes-finance/docs/user-guide/features/fallback-providers")
     print()
 
 
