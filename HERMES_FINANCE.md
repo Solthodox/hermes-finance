@@ -10,7 +10,7 @@ The installer renders repository templates into user-specific locations:
 - a `hermes-finance` command wrapper;
 - a Hermes-Finance wiki folder inside the user's Obsidian vault;
 - finance/trading/research skills;
-- MCP definitions for finance vault access, CoinGecko, Firecrawl, Exa, Alpha Vantage, Polymarket, Hyperliquid, Alpaca, and optional Obsidian Local REST API;
+- MCP definitions for finance vault access, CoinGecko, Firecrawl, Exa, Alpha Vantage, Polymarket, Hyperliquid, and Alpaca;
 - helper scripts for vault linting/search, MCP readiness, credential-gated MCP startup, and safe MCP enablement.
 
 ## Source of truth
@@ -98,6 +98,8 @@ The wrapper sets `HERMES_HOME` to the isolated home, prepends `~/.hermes-finance
 The installer also creates `~/.hermes-finance/home` so local terminal subprocesses get an isolated `HOME` when the runtime honors profile home isolation. This prevents accidental `~/.hermes` lookups from shell shorthand such as `~/.hermes/.env`.
 
 Telegram is not shared with default Hermes. The finance-local `tg` helper reads only `~/.hermes-finance/.env`; if `TELEGRAM_BOT_TOKEN` and `TELEGRAM_HOME_CHANNEL` are absent, it fails closed instead of using default Hermes credentials.
+
+Obsidian note access should go through the finance vault filesystem MCP. If your environment already exposes Nexus MCP for broader Obsidian workflows, prefer Nexus rather than adding a separate Obsidian REST MCP.
 
 ## Obsidian wiki
 

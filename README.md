@@ -70,7 +70,7 @@ This repository is **Hermes Finance**: an open-source, finance-specialized Herme
 - an isolated `HERMES_HOME`;
 - a pragmatic, analytic finance persona;
 - finance/trading/research skills;
-- MCP defaults for vault access, CoinGecko, Firecrawl, Exa, Alpha Vantage, Polymarket, Hyperliquid, Alpaca, and optional Obsidian REST API;
+- MCP defaults for vault access, CoinGecko, Firecrawl, Exa, Alpha Vantage, Polymarket, Hyperliquid, and Alpaca;
 - a seed Obsidian LLMWiki with trading math, execution, calibration, and risk notes.
 
 Hermes Finance is meant to install cleanly for any operator without bundling private memory, addresses, balances, or personal credentials.

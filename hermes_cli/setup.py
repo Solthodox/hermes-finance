@@ -522,12 +522,10 @@ def _print_setup_summary(config: dict, hermes_home):
         finance_ready.append("Hyperliquid MCP")
     if get_env_value("ALPACA_API_KEY") and get_env_value("ALPACA_SECRET_KEY"):
         finance_ready.append("Alpaca MCP")
-    if get_env_value("OBSIDIAN_API_KEY"):
-        finance_ready.append("Obsidian MCP")
     if finance_ready:
         tool_status.append(("Finance / Trading MCPs", True, ", ".join(finance_ready)))
     else:
-        tool_status.append(("Finance / Trading MCPs", False, "ALPHA_VANTAGE_API_KEY, COINGECKO_*_API_KEY, POLYMARKET_PRIVATE_KEY, HYPERLIQUID_PRIVATE_KEY, ALPACA_API_KEY/ALPACA_SECRET_KEY, or OBSIDIAN_API_KEY"))
+        tool_status.append(("Finance / Trading MCPs", False, "ALPHA_VANTAGE_API_KEY, COINGECKO_*_API_KEY, POLYMARKET_PRIVATE_KEY, HYPERLIQUID_PRIVATE_KEY, or ALPACA_API_KEY/ALPACA_SECRET_KEY"))
 
     # Home Assistant
     if get_env_value("HASS_TOKEN"):

@@ -20,7 +20,6 @@ REQUIRED = {
     'polymarket': ['POLYMARKET_PRIVATE_KEY'],
     'hyperliquid': ['HYPERLIQUID_PRIVATE_KEY'],
     'alpaca': ['ALPACA_API_KEY', 'ALPACA_SECRET_KEY'],
-    'obsidian': ['OBSIDIAN_API_KEY'],
 }
 TRADING = {'polymarket', 'hyperliquid', 'alpaca'}
 ALWAYS_ENABLED = {'finance_vault', 'coingecko'}

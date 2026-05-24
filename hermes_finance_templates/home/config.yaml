@@ -181,13 +181,3 @@ mcp_servers:
       ALPACA_PAPER: "true"
     timeout: 180
     connect_timeout: 60
-  obsidian:
-    enabled: false
-    command: "{{HERMES_FINANCE_HOME}}/scripts/mcp_env_exec.py"
-    args: ["--require", "OBSIDIAN_API_KEY", "--", "uvx", "mcp-obsidian"]
-    env:
-      OBSIDIAN_API_KEY: "${OBSIDIAN_API_KEY}"
-      OBSIDIAN_HOST: "${OBSIDIAN_HOST}"
-      OBSIDIAN_PORT: "${OBSIDIAN_PORT}"
-    timeout: 120
-    connect_timeout: 60

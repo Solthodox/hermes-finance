@@ -2062,14 +2062,6 @@ OPTIONAL_ENV_VARS = {
         "password": True,
         "category": "tool",
     },
-    "OBSIDIAN_API_KEY": {
-        "description": "Obsidian Local REST API key for optional Obsidian MCP access",
-        "prompt": "Obsidian API key",
-        "url": "https://github.com/coddingtonbear/obsidian-local-rest-api",
-        "tools": ["mcp_obsidian_*"],
-        "password": True,
-        "category": "tool",
-    },
     "SEARXNG_URL": {
         "description": "URL of your SearXNG instance for free self-hosted web search",
         "prompt": "SearXNG URL (e.g. http://localhost:8080)",
@@ -4755,7 +4747,6 @@ def show_config():
         ("POLYMARKET_PRIVATE_KEY", "Polymarket"),
         ("HYPERLIQUID_PRIVATE_KEY", "Hyperliquid"),
         ("ALPACA_API_KEY", "Alpaca"),
-        ("OBSIDIAN_API_KEY", "Obsidian MCP"),
     ]
     
     for env_key, name in keys:
@@ -4950,7 +4941,7 @@ def set_config_value(key: str, value: str):
         'FAL_KEY', 'ALPHA_VANTAGE_API_KEY', 'COINGECKO_DEMO_API_KEY', 'COINGECKO_PRO_API_KEY',
         'POLYMARKET_PRIVATE_KEY', 'POLYMARKET_FUNDER', 'POLYMARKET_API_KEY', 'POLYMARKET_API_SECRET',
         'POLYMARKET_PASSPHRASE', 'HYPERLIQUID_PRIVATE_KEY', 'HYPERLIQUID_ACCOUNT_ADDRESS',
-        'HYPERLIQUID_VAULT_ADDRESS', 'ALPACA_API_KEY', 'ALPACA_SECRET_KEY', 'OBSIDIAN_API_KEY',
+        'HYPERLIQUID_VAULT_ADDRESS', 'ALPACA_API_KEY', 'ALPACA_SECRET_KEY',
         'TELEGRAM_BOT_TOKEN', 'DISCORD_BOT_TOKEN',
         'TERMINAL_SSH_HOST', 'TERMINAL_SSH_USER', 'TERMINAL_SSH_KEY',
         'SUDO_PASSWORD', 'SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN',
